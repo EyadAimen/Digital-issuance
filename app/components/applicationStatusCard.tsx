@@ -18,7 +18,7 @@ export function ApplicationStatusCard({application, progress, updateMessage}: pr
 
             <View style={styles.progressBar}>
             <ProgressBar 
-            progress={0.5}
+            progress={progress/100}
             styleAttr="Horizontal"
             indeterminate={false}
             color="#FF0000"
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.whiteColor,
         borderColor: theme.whiteColor,
         borderRadius: 5,
+        marginBottom: 5,
     },
     text: {
         color: theme.whiteColor,
