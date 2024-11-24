@@ -1,4 +1,4 @@
-import { Pressable, Text, View, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 
 type props = {
@@ -8,11 +8,13 @@ type props = {
 
 export function ApplicationNavigationComponent({ appName, onPress }: props) {
     return (
-        <View style={styles.card}>
-            <Pressable onPress={onPress}>
-                <Text style={styles.text}>{appName}</Text>
-            </Pressable>
-        </View>
+        <TouchableOpacity 
+            onPress={onPress}
+            activeOpacity={0.8}
+            style={styles.card}
+            >
+            <Text style={styles.text}>{appName}</Text>
+        </TouchableOpacity>
     );
 }
 
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         padding: 5,
         margin: 5,
-        marginHorizontal:22
+        marginHorizontal:22,
     },
     text: {
         color: theme.whiteColor,
