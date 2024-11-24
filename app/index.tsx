@@ -2,14 +2,14 @@ import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { theme } from '../theme';
+import { ApplicationStatusCard } from './components/applicationStatusCard';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Link href={"digital-issuance/authentication/signin"}>
-        go to auth
-      </Link>
-      <Text>This is home screen</Text>
+      <ApplicationStatusCard application='License' progress={50} updateMessage='security check completed'/>
+      <ApplicationStatusCard application='License' progress={50} updateMessage='security check completed'/>
+      <ApplicationStatusCard application='License' progress={50} updateMessage='security check completed'/>
       <StatusBar style="auto" />
     </View>
   );
@@ -17,9 +17,9 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
+    flex: 1,
     backgroundColor: theme.whiteColor,
-    alignItems: 'center',
+    // alignItems: 'center',
     justifyContent: 'center',
   },
 });
