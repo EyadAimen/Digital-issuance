@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { theme } from '../theme';
 
 export default function App() {
   return (
@@ -17,7 +18,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 2,
-    backgroundColor: '#fff',
+    backgroundColor: theme.whiteColor,
     alignItems: 'center',
     justifyContent: 'center',
   },
