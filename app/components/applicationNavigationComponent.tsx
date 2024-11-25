@@ -1,5 +1,9 @@
-import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, View, StyleSheet, Image } from "react-native";
 import { theme } from "../../theme";
+import { fontStyles } from '../../fonts';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Fontisto from '@expo/vector-icons/Fontisto';
 
 type props = {
     appName: string,
@@ -7,29 +11,30 @@ type props = {
 }
 
 export function ApplicationNavigationComponent({ appName, onPress }: props) {
+
     return (
         <TouchableOpacity 
             onPress={onPress}
             activeOpacity={0.8}
             style={styles.card}
             >
-            <Text style={styles.text}>{appName}</Text>
+            {appName === "Passport"? 
+                <Fontisto name="passport-alt" size={34} color={theme.primaryBlue} />
+            :appName === "National ID"? 
+                <AntDesign name="idcard" size={34} color={theme.primaryBlue} />
+                : <FontAwesome name="drivers-license" size={34} color={theme.primaryBlue} />
+            }
+            <Text style={[fontStyles.baseStyle, fontStyles.tablabels]}>{appName}</Text>
         </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: theme.primaryBlue,
+        flex:1,
+        alignItems:'center',
+        gap: 12,
         borderRadius: 6,
-        padding: 5,
-        margin: 5,
-        marginHorizontal:22,
+        height: 62,
     },
-    text: {
-        color: theme.whiteColor,
-        marginBottom:5,
-        fontSize: 20,
-        fontWeight: "400"
-    }
   });

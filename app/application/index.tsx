@@ -3,16 +3,18 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { ApplicationNavigationComponent } from '../components/applicationNavigationComponent';
 import { theme } from '../../theme';
+import { fontStyles } from '../../fonts';
 
 export default function Application() {
   const router = useRouter();
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Select the the document that you want to renew</Text>
-      <ApplicationNavigationComponent appName="License" onPress={() => router.navigate("/application/license")} />
-      <ApplicationNavigationComponent appName="Passport" onPress={() => router.navigate("/application/passport")} />
-      <ApplicationNavigationComponent appName="National ID" onPress={() => router.navigate("/application/national_id")} />
-  
+      <Text style={fontStyles.body}>Select the document type you want to renew</Text>
+      <View style={styles.applicationContainer}>
+        <ApplicationNavigationComponent appName="Passport" onPress={() => router.navigate("/application/passport")} />
+        <ApplicationNavigationComponent appName="National ID" onPress={() => router.navigate("/application/national_id")} />
+        <ApplicationNavigationComponent appName="License" onPress={() => router.navigate("/application/license")} />
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -22,7 +24,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.whiteColor,
-    justifyContent: 'center',
+    paddingVertical: 48,
+    paddingHorizontal: 18,
+    gap: 32,
+    // justifyContent: 'center',
   },
   text: {
     color: theme.blackText,
@@ -30,6 +35,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize:22,
     fontWeight:'500',
-    
+  },
+  applicationContainer: {
+    flexDirection: 'row',
   }
 });
