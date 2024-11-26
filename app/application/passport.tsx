@@ -1,16 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import { fontStyles } from '../../fonts';
 import { theme } from '../../theme';
-import { Dimensions } from "react-native";
-import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
-import { Dropdown } from 'react-native-element-dropdown';
-import { router } from 'expo-router';
 import * as DocumentPicker from 'expo-document-picker';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { FormInputField } from '../components/form/formInputField';
+import { FormRadioInputField } from '../components/form/formRadioInputField';
+import { FormDropdownField } from '../components/form/formDropdownField';
+import { FormButton } from '../components/form/formButton';
+import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 
-var width = Dimensions.get('window').width
+type errorsType = {
+  fullName: string,
+  identityNo: string,
+  passportNo: string,
+  collectionOffice: string,
+  photoFile: string,
+  
+}
 
 export default function Passport() {
   const [fullName, setFullName] = useState<string>()
@@ -18,57 +25,68 @@ export default function Passport() {
   const [passportNumber, setPassportNumber] = useState<string>()
   const [isAbroad, setIsAbroad] = useState<boolean>(false)
   const [collectionOffice, setCollectionOffice] = useState<string>();
-  const [isFocus, setIsFocus] = useState(false);
-  const formData = new FormData();
+  const [errors, setErrors] = useState<errorsType>()
+  const [photoFile, setPhotoFile] = useState<DocumentPicker.DocumentPickerAsset>()
 
-  const collectionOffices = [
-    { name: "ALOR SETAR", isAbroad: false },
-    { name: "CHISEL STONE", isAbroad: false },
-    { name: "BESUT", isAbroad: false },
-    { name: "BINTULU", isAbroad: false },
-    { name: "CAMERON HIGHLAND", isAbroad: false },
-    { name: "IPOH", isAbroad: false },
-    { name: "JIM KUALA KUBU BHARU", isAbroad: false },
-    { name: "KAJANG", isAbroad: false },
-    { name: "KANGAR", isAbroad: false },
-    { name: "KEMAMAN", isAbroad: false },
-    { name: "KDN LANGKAWI COMPLEX", isAbroad: false },
-    { name: "KOTA KINABALU", isAbroad: false },
-    { name: "KUALA LANGAT", isAbroad: false }
-  ];
+  const formData = {
+    fullName: "",
+    identityNo: "",
+    passportNo: "",
+    collectionOffice: "",
+    passportphoto: null as DocumentPicker.DocumentPickerAsset | null
+  };
 
-  const collectionOfficesAbroad = [
-    { name: "IMMIGRATION ATTACHMENT", isAbroad: true },
-    { name: "BEIJING", isAbroad: true },
-    { name: "CANBERRA", isAbroad: true },
-    { name: "CONSULATE GENERAL OF MALAYSIA-CHENNAI", isAbroad: true },
-    { name: "HONG KONG", isAbroad: true },
-    { name: "JAKARTA", isAbroad: true },
-    { name: "CONSULATE GENERAL OF MALAYSIA - KUNMING", isAbroad: true },
-    { name: "LONDON", isAbroad: true },
-    { name: "MELBOURNE", isAbroad: true },
-    { name: "NEW DELHI", isAbroad: true },
-    { name: "NEW YORK", isAbroad: true },
-    { name: "MALAYSIAN CONSULATE OFFICE-GUANGZHOU", isAbroad: true },
-    { name: "PERTH", isAbroad: true },
-    { name: "SHANGHAI", isAbroad: true },
-    { name: "SINGAPORE", isAbroad: true }
-  ];
-
-  let photoFile: Blob = new Blob()
   
   const handleSubmit = () => {
     // console.log("Full Name: ", fullName)
     // console.log("Identity No: ", identityNumber)
     // console.log("Passport No: ", passportNumber)
     // console.log("Is Abroad: ", isAbroad)
-    console.log("Photo File: ", photoFile)
-    if(fullName) formData.append("fullName", fullName)
-    if(identityNumber) formData.append("identityNo", identityNumber)
-    if(passportNumber) formData.append("passportNo", passportNumber)
-    formData.append("passportPhoto", photoFile)
+    if(fullName) formData.fullName = fullName
+    if(identityNumber) formData.identityNo = identityNumber
+    if(passportNumber) formData.passportNo = passportNumber
+    if(collectionOffice) formData.collectionOffice = collectionOffice
+    if(photoFile) formData.passportphoto = photoFile
 
+    console.log("Form Data", formData)
+    const isValid = validateForm()
+    console.log(isValid)
   }
+
+  const validateForm = () => {
+    let errors = {
+      fullName: "",
+      identityNo: "",
+      passportNo: "",
+      collectionOffice: "",
+      photoFile: "",
+    }
+
+    const namePattern = /^[a-zA-Z\s]+$/; // Letters and spaces only
+    const idPattern = /^\d{12}$/; // Exactly 12 digits
+    const passportPattern = /^[A-Z]\d{8}$/; // A letter followed by 8 digits
+
+    if(!fullName) errors.fullName = "Full Name is required" 
+    else if (!namePattern.test(fullName)) {
+      errors.fullName = "Full Name must only contain letters and spaces (E.g Muhammad Amir bin Abdullah)";
+    }
+    if(!identityNumber) errors.identityNo = "Idenitity Number is required"
+    else if (!idPattern.test(identityNumber)) {
+      errors.identityNo = "Identification Number must be exactly 12 digits (E.g 970201141234)";
+    }
+    if(!passportNumber) errors.passportNo = "Passport Number is required"
+    else if (!passportPattern.test(passportNumber)) {
+      errors.passportNo = "Passport Number must start with a letter followed by 8 digits (E.g A02667184)";
+    }
+    if(!collectionOffice) errors.collectionOffice = "Collection Office is required"
+    if(!photoFile) errors.photoFile = "Personal Photo is required"
+
+    console.log("validate erros => ",errors)
+    setErrors(errors)
+    if(errors.fullName || errors.collectionOffice || errors.identityNo || errors.passportNo || errors.photoFile) return false
+    else return true
+  }
+
   const  uploadDoc = async () => {
     console.log("Pressed")
     try {
@@ -80,13 +98,7 @@ export default function Passport() {
         
         const file = assest[0] 
         
-        photoFile = new Blob ([JSON.stringify({
-          name: file.name.split(".")[0],
-          uri: file.uri,
-          type: file.mimeType,
-          size: file.size,
-          })]
-        )
+        setPhotoFile(file)
     } catch(err) {
       console.error(err)
     }
@@ -95,78 +107,38 @@ export default function Passport() {
     <ScrollView style={styles.container}>
         <Text style={fontStyles.body}>Please fill out the details below and ensure all the information are accurate</Text>
         <View style={styles.inputsContainer}>
-            <View style={styles.inputContianer}>
-              <Text>Full Name (as per passport) <Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={fullName}
-                style={styles.textInput}
-                onChangeText={setFullName}
-                placeholder="E.g Muhammad Amir bin Abdullah"
-              />
-            </View>
-            <View style={styles.inputContianer}>
-              <Text>Identification No.<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={identityNumber}
-                style={styles.textInput}
-                onChangeText={setIdentityNumber}
-                placeholder="E.g 970201141234"
-              />
-            </View>
-            <View style={styles.inputContianer}>
-              <Text>No. Current Passport<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={passportNumber}
-                style={styles.textInput}
-                onChangeText={setPassportNumber}
-                placeholder="E.g A02667184"
-              />
-            </View>
-            <View style={styles.inputContianer}>
-              <Text>Collection Office<Text style={{color:theme.failColor}}>*</Text></Text>
-              <RadioButtonGroup
-                containerStyle={styles.radioContainer}
-                selected={isAbroad}
-                onSelected={setIsAbroad}
-                radioBackground={theme.primaryBlue}
-                size={20}
-                containerOptionStyle={styles.radioButton}
-              >
-                <RadioButtonItem 
-                  value={false}
-                  label= {
-                    <Text style={fontStyles.body}>In the Country</Text>
-                  }
-                />
-                <RadioButtonItem
-                  value={true}
-                  label={
-                    <Text style={fontStyles.body}>Abroad</Text>
-                  }
-                />
-              </RadioButtonGroup>
-          </View>
-              <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                data={!isAbroad? collectionOffices: collectionOfficesAbroad}
-                search
-                maxHeight={300}
-                labelField="name"
-                valueField="name"
-                placeholder={!isFocus ? 'Select item' : '...'}
-                searchPlaceholder="Search..."
-                value={collectionOffice}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={item => {
-                  setCollectionOffice(item.name);
-                  console.log(item.name)
-                  setIsFocus(false);
-                }}
-              />
+            <FormInputField 
+              label= "Full Name (as per passport) "
+              value= {fullName}
+              setValue= {setFullName}
+              placeholder= "E.g Muhammad Amir bin Abdullah"
+              error= {errors?.fullName? errors.fullName: ""}
+            />
+            <FormInputField 
+              label= "Identification No."
+              value= {identityNumber}
+              setValue= {setIdentityNumber}
+              placeholder= "E.g 970201141234"
+              error= {errors?.identityNo? errors.identityNo: ""}
+            />
+            <FormInputField 
+              label= "No. Current Passport"
+              value= {passportNumber}
+              setValue= {setPassportNumber}
+              placeholder= "E.g A02667184"
+              error= {errors?.passportNo? errors.passportNo: ""}
+            />
+            <FormRadioInputField 
+              label= "Collection Office"
+              value= {isAbroad}
+              setValue= {setIsAbroad}
+            />
+            <FormDropdownField 
+              value={collectionOffice}
+              setValue={setCollectionOffice}
+              filter={isAbroad}
+              error= {errors?.collectionOffice? errors.collectionOffice: ""}
+            />
           <View style={styles.specifcationContianer}>
             <Text style={fontStyles.subHeading}>Personal photo specification</Text>
             <View style={styles.specifcationText}>
@@ -186,20 +158,17 @@ export default function Passport() {
                 {'\u2022  '}The picture uploaded is the latest face (picture taken within 1 month).
               </Text>
             </View>
-            <View style={styles.fileUploadContainer}>
-              <FontAwesome name="file-photo-o" size={32} color={theme.lightBlue} />
-                {photoFile? 
-                <View style={styles.uploadBtnContainer}>
-                  <Pressable onPress={uploadDoc}><Text style={[fontStyles.body, {color:theme.lightBlue}]}>Click here</Text></Pressable>
-                  <Text style={fontStyles.body}> to upload</Text>
-                </View>:
-                <View></View>
-                }
-            </View>
+            <FormPhotoUpload 
+              file={photoFile}
+              upload={uploadDoc}
+              error={errors?.photoFile}
+            />
+            {errors?.photoFile && <Text style={styles.errorText}>{errors.photoFile}</Text>}
+            <FormButton 
+                title= "Submit"
+                handlePress= {handleSubmit}
+            />
           </View>
-          <Pressable style={styles.buttonStyle} onPress={handleSubmit}>
-            <Text style={[fontStyles.buttonLabels, {color:theme.whiteColor}]}>Submit</Text>
-          </Pressable>
         </View>
       <StatusBar style="auto" />
     </ScrollView>
@@ -234,54 +203,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 6,
   },
-  radioContainer: {
-    flexDirection: "row",
-    gap: 16,
-  },
-  radioButton: {
-    gap: 4,
-    padding: 10,
-  },
-  buttonStyle: {
-    backgroundColor: theme.primaryBlue,
-    paddingVertical: 16,
-    paddingHorizontal: 10,
-    alignItems: "center",
-    borderRadius: 6,
-    marginTop: 48,
-  },
-
-  dropdown: {
-    borderColor: theme.grey2Text,
-    borderWidth: 1,
-    alignSelf: "stretch",
-    padding: 10,
-    fontSize: 16,
-    marginBottom: 12,
-    borderRadius: 6,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  label: {
-    position: 'absolute',
-    backgroundColor: 'white',
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
   specifcationContianer: {
     gap: 16,
   },
@@ -289,17 +210,9 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 8
   },
-  fileUploadContainer: {
-    alignItems: "center",
-    gap: 12,
-    borderStyle: 'dashed',
-    borderColor: theme.lightBlue,
-    borderWidth: 3,
-    paddingHorizontal: 16,
-    paddingVertical: 48,
-    borderRadius: 6
-  },
-  uploadBtnContainer: {
-    flexDirection: 'row'
+  errorText: {
+    color: theme.failColor,
+    fontSize: 12,
+    marginBottom: 8,
   }
 });
