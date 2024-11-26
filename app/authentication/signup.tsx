@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
+
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { fontStyles } from '../../fonts';
 import { theme } from '../../theme';
-import { FIREBASE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 
 export default function SignUp() {
@@ -20,17 +22,21 @@ export default function SignUp() {
   const [phone, setPhone] = useState<string>('');
 
   const auth = FIREBASE_AUTH;
-
+  const db = FIREBASE_DB;
+  const userColloection = collection(db, "users");
+  
   const handleSignUp = async() => {
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password).then(() => {
+      const response = await createUserWithEmailAndPassword(auth, email, password).then(async () => {
         try {
-          firestore().collection("users").doc(auth.currentUser?.uid).set({
+          const userData = {
             userName: userName,
             fullName: fullName,
             id: identityNumber,
             phone: phone
-          }).then(() =>{alert("Success")})
+          }
+          const userRef = doc(db,"users",auth.currentUser!.uid);
+          await setDoc(userRef, userData);
         } catch(e) {
           alert("something went wrong");
         }
