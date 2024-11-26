@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 import { fontStyles } from '../../fonts';
 import { theme } from '../../theme';
 import { Dimensions } from "react-native";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { Dropdown } from 'react-native-element-dropdown';
+import { router } from 'expo-router';
+import * as DocumentPicker from 'expo-document-picker';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 var width = Dimensions.get('window').width
 
@@ -16,6 +19,7 @@ export default function Passport() {
   const [isAbroad, setIsAbroad] = useState<boolean>(false)
   const [collectionOffice, setCollectionOffice] = useState<string>();
   const [isFocus, setIsFocus] = useState(false);
+  const formData = new FormData();
 
   let data = [{
     value: 'Banana', label: "Banana"
@@ -24,19 +28,46 @@ export default function Passport() {
   }, {
     value: 'Pear', label: "Pear",
   }]
+
+  let photoFile: Blob = new Blob()
   
   const handleSubmit = () => {
-    console.log("Full Name: ", fullName)
-    console.log("Identity No: ", identityNumber)
-    console.log("Passport No: ", passportNumber)
-    console.log("Is Abroad: ", isAbroad)
+    // console.log("Full Name: ", fullName)
+    // console.log("Identity No: ", identityNumber)
+    // console.log("Passport No: ", passportNumber)
+    // console.log("Is Abroad: ", isAbroad)
+    console.log("Photo File: ", photoFile)
+    if(fullName) formData.append("fullName", fullName)
+    if(identityNumber) formData.append("identityNo", identityNumber)
+    if(passportNumber) formData.append("passportNo", passportNumber)
+    formData.append("passportPhoto", photoFile)
+
+  }
+  const  uploadDoc = async () => {
+    console.log("Pressed")
+    try {
+        const doc: Promise<DocumentPicker.DocumentPickerResult> = DocumentPicker.getDocumentAsync({
+          type: "image/*"
+        })
+        const assest = (await doc).assets
+        if(!assest) return
+        
+        const file = assest[0] 
+        
+        photoFile = new Blob ([JSON.stringify({
+          name: file.name.split(".")[0],
+          uri: file.uri,
+          type: file.mimeType,
+          size: file.size,
+          })]
+        )
+    } catch(err) {
+      console.error(err)
+    }
   }
   return (
-    <View style={styles.container}>
-        <View style={styles.promptContainer}>
-          <Text style={fontStyles.subHeading}>Passport Renew Application</Text>
-          <Text style={fontStyles.body}>Please fill out the details below and ensure all the information is accurate</Text>
-        </View>
+    <ScrollView style={styles.container}>
+        <Text style={fontStyles.body}>Please fill out the details below and ensure all the information are accurate</Text>
         <View style={styles.inputsContainer}>
             <View style={styles.inputContianer}>
               <Text>Full Name (as per passport) <Text style={{color:theme.failColor}}>*</Text></Text>
@@ -110,29 +141,57 @@ export default function Passport() {
                   setIsFocus(false);
                 }}
               />
+          <View style={styles.specifcationContianer}>
+            <Text style={fontStyles.subHeading}>Personal photo specification</Text>
+            <View style={styles.specifcationText}>
+              <Text>
+                {'\u2022   '}The photo background MUST be white without any shadows, backgrounds using other colors will not be accepted.
+              </Text>
+              <Text>
+                {'\u2022  '}Dark colored clothing that covers the shoulders and chest.
+              </Text>
+              <Text>
+                {'\u2022  '}Female applicants who wear a headscarf or hijab must wear a headscarf or hijab that is dark, unpatterned and must not cover the face.
+              </Text>
+              <Text>
+                {'\u2022  '}Applicants are not allowed to wear glasses, contact lenses and any accessories on the face, ears and head.
+              </Text>
+              <Text>
+                {'\u2022  '}The picture uploaded is the latest face (picture taken within 1 month).
+              </Text>
+            </View>
+            <View style={styles.fileUploadContainer}>
+              <FontAwesome name="file-photo-o" size={32} color={theme.lightBlue} />
+                {photoFile? 
+                <View style={styles.uploadBtnContainer}>
+                  <Pressable onPress={uploadDoc}><Text style={[fontStyles.body, {color:theme.lightBlue}]}>Click here</Text></Pressable>
+                  <Text style={fontStyles.body}> to upload</Text>
+                </View>:
+                <View></View>
+                }
+            </View>
+          </View>
           <Pressable style={styles.buttonStyle} onPress={handleSubmit}>
-            <Text style={[fontStyles.buttonLabels, {color:theme.whiteColor}]}>Next</Text>
+            <Text style={[fontStyles.buttonLabels, {color:theme.whiteColor}]}>Submit</Text>
           </Pressable>
         </View>
       <StatusBar style="auto" />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingVertical: 72,
+    backgroundColor: theme.whiteColor,
+    paddingVertical: 56,
     paddingHorizontal: 18,
-    gap: 32,
-  },
-  promptContainer: {
-    display: "flex",
-    gap: 12,
+    gap: 48,
+
   },
   inputsContainer: {
-
+    marginTop: 32,
+    gap:12,
   },
   inputContianer: {
     display: "flex",
@@ -197,4 +256,24 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
+  specifcationContianer: {
+    gap: 16,
+  },
+  specifcationText: {
+    gap: 8,
+    paddingHorizontal: 8
+  },
+  fileUploadContainer: {
+    alignItems: "center",
+    gap: 12,
+    borderStyle: 'dashed',
+    borderColor: theme.lightBlue,
+    borderWidth: 3,
+    paddingHorizontal: 16,
+    paddingVertical: 48,
+    borderRadius: 6
+  },
+  uploadBtnContainer: {
+    flexDirection: 'row'
+  }
 });

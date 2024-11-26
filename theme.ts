@@ -9,6 +9,6 @@ export const theme = {
     failColor: "#DC3545",
     warningColor: "#FFC107",
 
-    secondaryBole: "#4D94FF",
+    lightBlue: "#4D94FF",
     whiteColor: "#FFFFFF"
 };

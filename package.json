@@ -12,6 +12,7 @@
     "@react-native-community/progress-bar-android": "^1.0.5",
     "expo": "~52.0.4",
     "expo-constants": "~17.0.2",
+    "expo-document-picker": "^13.0.1",
     "expo-linking": "~7.0.2",
     "expo-radio-button": "^1.0.8",
     "expo-router": "~4.0.2",
