@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import { fontStyles } from '../../fonts';
 import { theme } from '../../theme';
@@ -9,6 +9,7 @@ import { FormRadioInputField } from '../components/form/formRadioInputField';
 import { FormDropdownField } from '../components/form/formDropdownField';
 import { FormButton } from '../components/form/formButton';
 import { FormPhotoUpload } from '../components/form/formPhotoUpload';
+import { router } from 'expo-router';
 
 type errorsType = {
   fullName: string,
@@ -50,6 +51,17 @@ export default function Passport() {
 
     console.log("Form Data", formData)
     const isValid = validateForm()
+
+    if (isValid) {
+      Alert.alert(
+        "Application Submitted",
+        "We will notify you about the application updates",
+        [{
+            text: "OK",
+            onPress: () => router.navigate("/"),  
+        }]
+      );
+    }    
     console.log(isValid)
   }
 
@@ -62,9 +74,9 @@ export default function Passport() {
       photoFile: "",
     }
 
-    const namePattern = /^[a-zA-Z\s]+$/; // Letters and spaces only
-    const idPattern = /^\d{12}$/; // Exactly 12 digits
-    const passportPattern = /^[A-Z]\d{8}$/; // A letter followed by 8 digits
+    const namePattern = /^[a-zA-Z\s]+$/;
+    const idPattern = /^\d{12}$/;
+    const passportPattern = /^[AHK]\d{8}$/;
 
     if(!fullName) errors.fullName = "Full Name is required" 
     else if (!namePattern.test(fullName)) {
@@ -76,7 +88,7 @@ export default function Passport() {
     }
     if(!passportNumber) errors.passportNo = "Passport Number is required"
     else if (!passportPattern.test(passportNumber)) {
-      errors.passportNo = "Passport Number must start with a letter followed by 8 digits (E.g A02667184)";
+      errors.passportNo = "The Passport Number must start with either 'A,' 'H,' or 'K,' followed by exactly 8 digits (e.g., A02667184).";
     }
     if(!collectionOffice) errors.collectionOffice = "Collection Office is required"
     if(!photoFile) errors.photoFile = "Personal Photo is required"
@@ -163,7 +175,6 @@ export default function Passport() {
               upload={uploadDoc}
               error={errors?.photoFile}
             />
-            {errors?.photoFile && <Text style={styles.errorText}>{errors.photoFile}</Text>}
             <FormButton 
                 title= "Submit"
                 handlePress= {handleSubmit}
@@ -210,9 +221,4 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 8
   },
-  errorText: {
-    color: theme.failColor,
-    fontSize: 12,
-    marginBottom: 8,
-  }
 });
