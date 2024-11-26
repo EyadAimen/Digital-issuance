@@ -21,13 +21,39 @@ export default function Passport() {
   const [isFocus, setIsFocus] = useState(false);
   const formData = new FormData();
 
-  let data = [{
-    value: 'Banana', label: "Banana"
-  }, {
-    value: 'Mango', label: "Mango",
-  }, {
-    value: 'Pear', label: "Pear",
-  }]
+  const collectionOffices = [
+    { name: "ALOR SETAR", isAbroad: false },
+    { name: "CHISEL STONE", isAbroad: false },
+    { name: "BESUT", isAbroad: false },
+    { name: "BINTULU", isAbroad: false },
+    { name: "CAMERON HIGHLAND", isAbroad: false },
+    { name: "IPOH", isAbroad: false },
+    { name: "JIM KUALA KUBU BHARU", isAbroad: false },
+    { name: "KAJANG", isAbroad: false },
+    { name: "KANGAR", isAbroad: false },
+    { name: "KEMAMAN", isAbroad: false },
+    { name: "KDN LANGKAWI COMPLEX", isAbroad: false },
+    { name: "KOTA KINABALU", isAbroad: false },
+    { name: "KUALA LANGAT", isAbroad: false }
+  ];
+
+  const collectionOfficesAbroad = [
+    { name: "IMMIGRATION ATTACHMENT", isAbroad: true },
+    { name: "BEIJING", isAbroad: true },
+    { name: "CANBERRA", isAbroad: true },
+    { name: "CONSULATE GENERAL OF MALAYSIA-CHENNAI", isAbroad: true },
+    { name: "HONG KONG", isAbroad: true },
+    { name: "JAKARTA", isAbroad: true },
+    { name: "CONSULATE GENERAL OF MALAYSIA - KUNMING", isAbroad: true },
+    { name: "LONDON", isAbroad: true },
+    { name: "MELBOURNE", isAbroad: true },
+    { name: "NEW DELHI", isAbroad: true },
+    { name: "NEW YORK", isAbroad: true },
+    { name: "MALAYSIAN CONSULATE OFFICE-GUANGZHOU", isAbroad: true },
+    { name: "PERTH", isAbroad: true },
+    { name: "SHANGHAI", isAbroad: true },
+    { name: "SINGAPORE", isAbroad: true }
+  ];
 
   let photoFile: Blob = new Blob()
   
@@ -125,19 +151,19 @@ export default function Passport() {
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
-                data={data}
+                data={!isAbroad? collectionOffices: collectionOfficesAbroad}
                 search
                 maxHeight={300}
-                labelField="label"
-                valueField="value"
+                labelField="name"
+                valueField="name"
                 placeholder={!isFocus ? 'Select item' : '...'}
                 searchPlaceholder="Search..."
                 value={collectionOffice}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 onChange={item => {
-                  setCollectionOffice(item.value);
-                  console.log(item.value)
+                  setCollectionOffice(item.name);
+                  console.log(item.name)
                   setIsFocus(false);
                 }}
               />
