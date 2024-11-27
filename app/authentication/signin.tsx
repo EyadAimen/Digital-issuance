@@ -24,6 +24,7 @@ export default function SginIn() {
     }
   }
   
+export function SginIn() {
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView behavior='position' >

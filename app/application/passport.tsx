@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import { fontStyles } from '../../fonts';
 import { theme } from '../../theme';
@@ -9,6 +9,7 @@ import { FormRadioInputField } from '../components/form/formRadioInputField';
 import { FormDropdownField } from '../components/form/formDropdownField';
 import { FormButton } from '../components/form/formButton';
 import { FormPhotoUpload } from '../components/form/formPhotoUpload';
+import { router } from 'expo-router';
 
 type errorsType = {
   fullName: string,
@@ -50,6 +51,17 @@ export default function Passport() {
 
     console.log("Form Data", formData)
     const isValid = validateForm()
+
+    if (isValid) {
+      Alert.alert(
+        "Application Submitted",
+        "We will notify you about the application updates",
+        [{
+            text: "OK",
+            onPress: () => router.navigate("/"),  
+        }]
+      );
+    }    
     console.log(isValid)
   }
 
@@ -62,9 +74,9 @@ export default function Passport() {
       photoFile: "",
     }
 
-    const namePattern = /^[a-zA-Z\s]+$/; // Letters and spaces only
-    const idPattern = /^\d{12}$/; // Exactly 12 digits
-    const passportPattern = /^[A-Z]\d{8}$/; // A letter followed by 8 digits
+    const namePattern = /^[a-zA-Z\s]+$/;
+    const idPattern = /^\d{12}$/;
+    const passportPattern = /^[AHK]\d{8}$/;
 
     if(!fullName) errors.fullName = "Full Name is required" 
     else if (!namePattern.test(fullName)) {
@@ -76,7 +88,7 @@ export default function Passport() {
     }
     if(!passportNumber) errors.passportNo = "Passport Number is required"
     else if (!passportPattern.test(passportNumber)) {
-      errors.passportNo = "Passport Number must start with a letter followed by 8 digits (E.g A02667184)";
+      errors.passportNo = "The Passport Number must start with either 'A,' 'H,' or 'K,' followed by exactly 8 digits (e.g., A02667184).";
     }
     if(!collectionOffice) errors.collectionOffice = "Collection Office is required"
     if(!photoFile) errors.photoFile = "Personal Photo is required"
@@ -141,29 +153,43 @@ export default function Passport() {
             />
           <View style={styles.specifcationContianer}>
             <Text style={fontStyles.subHeading}>Personal photo specification</Text>
-            <View style={styles.specifcationText}>
-              <Text>
-                {'\u2022   '}The photo background MUST be white without any shadows, backgrounds using other colors will not be accepted.
-              </Text>
-              <Text>
-                {'\u2022  '}Dark colored clothing that covers the shoulders and chest.
-              </Text>
-              <Text>
-                {'\u2022  '}Female applicants who wear a headscarf or hijab must wear a headscarf or hijab that is dark, unpatterned and must not cover the face.
-              </Text>
-              <Text>
-                {'\u2022  '}Applicants are not allowed to wear glasses, contact lenses and any accessories on the face, ears and head.
-              </Text>
-              <Text>
-                {'\u2022  '}The picture uploaded is the latest face (picture taken within 1 month).
-              </Text>
+            <View style={styles.specifcationTextContainer}>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  The photo background MUST be white without any shadows, backgrounds using other colors will not be accepted.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  Dark colored clothing that covers the shoulders and chest.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  Female applicants who wear a headscarf or hijab must wear a headscarf or hijab that is dark, unpatterned and must not cover the face.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  Applicants are not allowed to wear glasses, contact lenses and any accessories on the face, ears and head.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  The picture uploaded is recent (picture taken within 1 month).
+                </Text>
+              </View>
             </View>
             <FormPhotoUpload 
               file={photoFile}
               upload={uploadDoc}
               error={errors?.photoFile}
             />
-            {errors?.photoFile && <Text style={styles.errorText}>{errors.photoFile}</Text>}
             <FormButton 
                 title= "Submit"
                 handlePress= {handleSubmit}
@@ -182,7 +208,6 @@ const styles = StyleSheet.create({
     paddingVertical: 56,
     paddingHorizontal: 18,
     gap: 48,
-
   },
   inputsContainer: {
     marginTop: 32,
@@ -206,13 +231,11 @@ const styles = StyleSheet.create({
   specifcationContianer: {
     gap: 16,
   },
-  specifcationText: {
+  specifcationTextContainer: {
     gap: 8,
     paddingHorizontal: 8
   },
-  errorText: {
-    color: theme.failColor,
-    fontSize: 12,
-    marginBottom: 8,
+  specifcationItem: {
+    flexDirection: 'row'
   }
 });
