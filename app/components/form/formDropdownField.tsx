@@ -57,7 +57,7 @@ export function FormDropdownField({value, filter, setValue, error}: formDropdown
                 maxHeight={300}
                 labelField="name"
                 valueField="name"
-                placeholder={!isFocus ? 'Select item' : '...'}
+                placeholder={!isFocus ? 'Select' : '...'}
                 searchPlaceholder="Search..."
                 value={value}
                 onFocus={() => setIsFocus(true)}
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
       },
       placeholderStyle: {
+        color: theme.grey2Text,
         fontSize: 16,
       },
       selectedTextStyle: {
