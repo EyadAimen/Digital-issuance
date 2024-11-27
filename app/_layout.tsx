@@ -7,12 +7,6 @@ export default function Layout() {
       <Tabs.Screen name="application" options={{ title: "Application", headerShown:false }} />
       <Tabs.Screen name="notifications" options={{ title: "Notifcations", headerShown:false }} />
       <Tabs.Screen name="settings" options={{ title: "Settings", headerShown:false }} />
-      <Tabs.Screen
-        name="authentication"
-        options={{
-          href: null,
-        }}
-        />
     </Tabs>
   );
 }
