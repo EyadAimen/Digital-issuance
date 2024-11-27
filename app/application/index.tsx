@@ -11,9 +11,9 @@ export default function Application() {
     <View style={styles.container}>
       <Text style={fontStyles.body}>Select the document type you want to renew</Text>
       <View style={styles.applicationContainer}>
-        <ApplicationNavigationComponent appName="Passport" onPress={() => router.navigate("/application/passport")} />
-        <ApplicationNavigationComponent appName="National ID" onPress={() => router.navigate("/application/national_id")} />
-        <ApplicationNavigationComponent appName="License" onPress={() => router.navigate("/application/license")} />
+        <ApplicationNavigationComponent appName="Passport" onPress={() => router.navigate("/application/eligibility-criteria?documentType=passport")} />
+        <ApplicationNavigationComponent appName="National ID" onPress={() => router.navigate("/application/eligibility-criteria?documentType=national_id")} />
+        <ApplicationNavigationComponent appName="License" onPress={() => router.navigate("/application/eligibility-criteria?documentType=license")} />
       </View>
       <StatusBar style="auto" />
     </View>

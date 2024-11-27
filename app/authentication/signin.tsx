@@ -2,7 +2,7 @@ import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function SginIn() {
+export function SginIn() {
   return (
     <View style={styles.container}>
         <Link href={"/authentication/signup"}>
