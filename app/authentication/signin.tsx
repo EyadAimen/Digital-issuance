@@ -23,8 +23,6 @@ export default function SginIn() {
       alert('Sign in failed' + e.message);
     }
   }
-  
-export function SginIn() {
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView behavior='position' >
