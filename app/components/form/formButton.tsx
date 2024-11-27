@@ -36,7 +36,4 @@ const styles = StyleSheet.create({
     clickedButton: {
         opacity: .8
     },
-    clickedText: {
-        color: theme.grey2Text,
-    },
 })
