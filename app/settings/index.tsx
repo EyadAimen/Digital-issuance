@@ -1,19 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View, Button } from 'react-native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { signOut } from 'firebase/auth';
 import { router } from 'expo-router';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, onSnapshot, setDoc } from 'firebase/firestore';
 import { FormButton } from '../components/form/formButton';
+import { FormInputField } from '../components/form/formInputField';
 
 export default function Settings() {
   const [userData, setUserData] = useState<any>(null); // State to store the fetched data
   const [isEdit, setEdit] = useState(false);
-  const [isChangePassword, setChangePassword] = useState(false);
+  const [phone, setPhone] = useState<string>();
+  const [userName, setUserName] = useState<string>();
+  const [showDetails, setSHowDetails] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
   const auth = FIREBASE_AUTH;
   const db = FIREBASE_DB;
-
+  const userDocRef = doc(db, "users", "pxanKx1FkCcIhByoy6XFGxZgm073");
   // Handle sign-out function
   const handleSignOut = async () => {
     await signOut(auth).then(() => {
@@ -28,46 +32,87 @@ export default function Settings() {
     });
   };
 
+  // handle the change submit
+  const handleChange = async () => {
+    if(userName && phone ){
+      await setDoc(userDocRef, {userName: userName, phone: phone }, {merge : true}).then(()=> {
+        Alert.alert(
+          "Success",
+          " ",
+          [{
+            text: "OK"
+          }]
+        )  
+      });
+    } else {
+      Alert.alert(
+        "Failed",
+        "One of the input fields is empty",
+        [{
+          text: "OK"
+        }]
+      )
+    }
+  }
+
   // Fetch user data from Firestore
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userDocRef = doc(db, "users", auth.currentUser!.uid);
-        const docSnapshot = await getDoc(userDocRef); 
+        // const userDocRef = doc(db, "users", auth.currentUser!.uid);
         
-        if (docSnapshot.exists()) {
-          setUserData(docSnapshot.data());
-        } else {
-          console.log("No such document!");
-        }
+        await getDoc(userDocRef); 
+        const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            setUserData(docSnapshot.data());
+            
+          } 
+        });
       } catch (error) {
         console.error("Error fetching user data: ", error);
       }
     };
 
     fetchUserData();
-  }, [auth.currentUser!.uid]);
+  }, []);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Text>Settings Screen</Text>
-      <Button title="Sign Out" onPress={handleSignOut} />
+      <FormButton title="Sign Out" handlePress={handleSignOut} />
 
       {/* Render user data */}
       <View style={styles.userDataContainer}>
         {userData ? (
             <View>
-            <Text>Name: {userData.userName}</Text>
-            <Text>Email: {userData.email}</Text>
+            <Text>User name: {userData.userName}</Text>
+            <Text>Phone no: {userData.phone}</Text>
+            {showDetails? (
+              <View>
+                <Text>Full name: {userData.fullName}</Text>
+                <Text>NIRC: {userData.id}</Text>
+              </View>
+            ) : (null)
+            }
+
+            <FormButton title='Show more details' handlePress={() => {setSHowDetails(!showDetails)}}></FormButton>
+            
+            {isEdit? (
+              <View>
+                <FormInputField label={'User name'} placeholder={''} value={userName} setValue={setUserName} />
+                <FormInputField label={'Phone'} placeholder={''} value={phone} setValue={setPhone} />
+                <FormButton title='Confirm edit' handlePress={handleChange}></FormButton>
+
+              </View>
+            ) 
+            : (null)}
+            <FormButton title='Edit profile' handlePress={() => {setEdit(!isEdit)}}></FormButton>
             </View>
             
         ) : (
           <Text>No user data</Text>
         )}
       </View>
-      <FormButton title={'Sign Up'} handlePress={handleSignOut}
-      />
     </View>
   );
 }
