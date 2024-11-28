@@ -62,7 +62,7 @@ export default function Settings() {
         // const userDocRef = doc(db, "users", auth.currentUser!.uid);
         
         await getDoc(userDocRef); 
-        const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+        onSnapshot(userDocRef, (docSnapshot) => {
           if (docSnapshot.exists()) {
             setUserData(docSnapshot.data());
             
