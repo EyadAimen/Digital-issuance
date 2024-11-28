@@ -8,7 +8,7 @@ import { theme } from '../../theme';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-import { collection, doc, setDoc } from 'firebase/firestore';
+import {  doc, setDoc } from 'firebase/firestore';
 
 
 export default function SignUp() {
