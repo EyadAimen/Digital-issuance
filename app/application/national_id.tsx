@@ -10,6 +10,8 @@ import { FormDropdownField } from '../components/form/formDropdownField';
 import { FormButton } from '../components/form/formButton';
 import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
+import { FIREBASE_DB, FIREBASE_AUTH } from '../../firebaseConfig';
+import { addDoc, collection } from 'firebase/firestore';
 
 type errorsType = {
   fullName: string,
@@ -28,42 +30,49 @@ export default function NationalID() {
   const [errors, setErrors] = useState<errorsType>()
   const [photoFile, setPhotoFile] = useState<DocumentPicker.DocumentPickerAsset>()
 
-  const formData = {
-    fullName: "",
-    identityNo: "",
-    collectionOffice: "",
-    personalPhoto: null as DocumentPicker.DocumentPickerAsset | null
-  };
-
+  const db = FIREBASE_DB;
+  const auth = FIREBASE_AUTH;
   
-  const handleSubmit = () => {
-    // console.log("Full Name: ", fullName)
-    // console.log("Identity No: ", identityNumber)
-    // console.log("Passport No: ", passportNumber)
-    // console.log("Is Abroad: ", isAbroad)
-    if(fullName) formData.fullName = fullName
-    if(identityNumber) formData.identityNo = identityNumber
-    if(collectionOffice) formData.collectionOffice = collectionOffice
-    if(photoFile) formData.personalPhoto = photoFile
+  const handleSubmit = async () => {
 
-    console.log("Form Data", formData)
     const isValid = validateForm()
 
     if (isValid) {
-      setFullName("")
-      setIdentityNumber("")
-      setCollectionOffice("")
-      setPhotoFile(undefined)
-      Alert.alert(
-        "Application Submitted",
-        "We will notify you about the application updates",
-        [{
+      const formData = {
+        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
+        // userID: auth.currentUser!.uid,
+        type: "NRIC",
+        fullName: fullName,
+        identityNo: identityNumber,
+        collectionOffice: collectionOffice,
+        personalPhoto: photoFile
+      };
+      const reqRef = collection(db,"requests");
+      try {
+        await addDoc(reqRef, formData).then(()=> {
+          setFullName("")
+          setIdentityNumber("")
+          setCollectionOffice("")
+          setPhotoFile(undefined)
+          Alert.alert(
+            "Application Submitted",
+            "We will notify you about the application updates",
+            [{
+              text: "OK",
+              onPress: () => router.navigate("/"),
+            }]
+          );
+        })
+      } catch(e) {
+        Alert.alert(
+          "Submission failed",
+          "Something went wrong",
+          [{
             text: "OK",
-            onPress: () => router.navigate("/"),  
-        }]
-      );
-    }    
-    console.log(isValid)
+          }]
+        )
+      }
+    }
   }
 
   const validateForm = () => {
@@ -90,7 +99,6 @@ export default function NationalID() {
     if(!collectionOffice) errors.collectionOffice = "Collection Office is required"
     if(!photoFile) errors.photoFile = "Personal Photo is required"
 
-    console.log("validate erros => ",errors)
     setErrors(errors)
     if(errors.fullName || errors.collectionOffice || errors.identityNo || errors.passportNo || errors.photoFile) return false
     else return true
