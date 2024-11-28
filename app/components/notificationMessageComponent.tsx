@@ -2,19 +2,20 @@ import { Text, View, StyleSheet } from "react-native"
 import { theme } from "../../theme"
 
 type props = {
-    date: string,
+    date: Date,
     status: string,
-    statusMessage: string,
+    title: string,
     message: string,
 }
 
-export function NotificationMessageComponent({ date, status, statusMessage, message }: props) {
+export function NotificationMessageComponent({ date, status, title, message }: props) {
+    
     return(
     <View style={styles.card}>
         <Text 
-        style={styles.dateText}>{date}</Text>
+        style={styles.dateText}>{date.toUTCString()}</Text>
         <Text style={[styles.statusText, status === "Fail"? { color:theme.failColor }: status === "Success" ? { color:theme.successColor }: { color:theme.warningColor }]}>{status}</Text>
-        <Text style={styles.statusText}>{statusMessage}</Text>
+        <Text style={styles.statusText}>{title}</Text>
         <Text style={styles.messageText}>{message}</Text>
     </View>
     );
