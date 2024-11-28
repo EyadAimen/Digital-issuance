@@ -141,24 +141,39 @@ export default function NationalID() {
               filter={isAbroad}
               error= {errors?.collectionOffice? errors.collectionOffice: ""}
             />
-          <View style={styles.specifcationContianer}>
+<View style={styles.specifcationContianer}>
             <Text style={fontStyles.subHeading}>Personal photo specification</Text>
-            <View style={styles.specifcationText}>
-              <Text>
-                {'\u2022   '}The photo background MUST be white without any shadows, backgrounds using other colors will not be accepted.
-              </Text>
-              <Text>
-                {'\u2022  '}Dark colored clothing that covers the shoulders and chest.
-              </Text>
-              <Text>
-                {'\u2022  '}Female applicants who wear a headscarf or hijab must wear a headscarf or hijab that is dark, unpatterned and must not cover the face.
-              </Text>
-              <Text>
-                {'\u2022  '}Applicants are not allowed to wear glasses, contact lenses and any accessories on the face, ears and head.
-              </Text>
-              <Text>
-                {'\u2022  '}The picture uploaded is the latest face (picture taken within 1 month).
-              </Text>
+            <View style={styles.specifcationTextContainer}>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  The photo background MUST be white without any shadows, backgrounds using other colors will not be accepted.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  Dark colored clothing that covers the shoulders and chest.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  Female applicants who wear a headscarf or hijab must wear a headscarf or hijab that is dark, unpatterned and must not cover the face.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  Applicants are not allowed to wear glasses, contact lenses and any accessories on the face, ears and head.
+                </Text>
+              </View>
+              <View style={styles.specifcationItem}>
+                <Text>•</Text>
+                <Text style={{marginLeft: 10}}>
+                  The picture uploaded is recent (picture taken within 1 month).
+                </Text>
+              </View>
             </View>
             <FormPhotoUpload 
               file={photoFile}
@@ -206,8 +221,11 @@ const styles = StyleSheet.create({
   specifcationContianer: {
     gap: 16,
   },
-  specifcationText: {
+  specifcationTextContainer: {
     gap: 8,
     paddingHorizontal: 8
   },
+  specifcationItem: {
+    flexDirection: 'row'
+  }
 });
