@@ -10,6 +10,8 @@ import { FormDropdownField } from '../components/form/formDropdownField';
 import { FormButton } from '../components/form/formButton';
 import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 
 type errorsType = {
   fullName: string,
@@ -21,6 +23,8 @@ type errorsType = {
 }
 
 export default function License() {
+  const db = FIREBASE_DB;
+  const auth = FIREBASE_AUTH;
   const [fullName, setFullName] = useState<string>()
   const [identityNumber, setIdentityNumber] = useState<string>()
   const [isAbroad, setIsAbroad] = useState<boolean>(false)
@@ -28,38 +32,63 @@ export default function License() {
   const [errors, setErrors] = useState<errorsType>()
   const [photoFile, setPhotoFile] = useState<DocumentPicker.DocumentPickerAsset>()
 
-  const formData = {
-    fullName: "",
-    identityNo: "",
-    collectionOffice: "",
-    personalPhoto: null as DocumentPicker.DocumentPickerAsset | null
-  };
-
-
-  const handleSubmit = () => {
-    if (fullName) formData.fullName = fullName
-    if (identityNumber) formData.identityNo = identityNumber
-    if (collectionOffice) formData.collectionOffice = collectionOffice
-    if (photoFile) formData.personalPhoto = photoFile
-
-    console.log("Form Data", formData)
+  
+  
+  const handleSubmit = async () => {
     const isValid = validateForm()
-
-    if (isValid) {
-      setFullName("")
-      setIdentityNumber("")
-      setCollectionOffice("")
-      setPhotoFile(undefined)
-      Alert.alert(
-        "Application Submitted",
-        "We will notify you about the application updates",
-        [{
-          text: "OK",
-          onPress: () => router.navigate("/"),
-        }]
-      );
-    }
     console.log(isValid)
+    if (isValid) {
+      const formData = {
+        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
+        // userID: auth.currentUser!.uid,
+        type: "License",
+        fullName: fullName,
+        identityNo: identityNumber,
+        collectionOffice: collectionOffice,
+        progress: 0,
+        messages: [{
+          submissionMessage: [
+          new Date(),
+          "Success",
+          "Apllication submitted successfully"
+          ]
+        }],
+        personalPhoto: photoFile
+      };
+
+
+      const reqRef = collection(db,"requests");
+      try {
+        const reqDoc = await addDoc(reqRef, formData);
+        // uer id ---------------------------------------------------------------------------
+          const userRef = doc(db,"users","pxanKx1FkCcIhByoy6XFGxZgm073");
+          await setDoc(userRef, {licenseApp: reqDoc.id}, {merge : true});
+        
+          setFullName("")
+          setIdentityNumber("")
+          setCollectionOffice("")
+          setPhotoFile(undefined)
+          Alert.alert(
+            "Application Submitted",
+            "We will notify you about the application updates",
+            [{
+              text: "OK",
+              onPress: () => router.navigate("/"),
+            }]
+          );
+        
+        
+      } catch(e) {
+        Alert.alert(
+          "Submission failed",
+          "Something went wrong",
+          [{
+            text: "OK",
+          }]
+        )
+      }
+      
+    }
   }
 
   const validateForm = () => {
@@ -86,7 +115,6 @@ export default function License() {
     if (!collectionOffice) errors.collectionOffice = "Collection Office is required"
     if (!photoFile) errors.photoFile = "Personal Photo is required"
 
-    console.log("validate erros => ", errors)
     setErrors(errors)
     if (errors.fullName || errors.collectionOffice || errors.identityNo || errors.passportNo || errors.photoFile) return false
     else return true
