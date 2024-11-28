@@ -33,7 +33,7 @@ export default function EligibilityCriteria() {
       <Text style={fontStyles.mainHeading}>Eligibility Criteria</Text>
       <View style={styles.criteriaContainer}>
         {documentCriteria.map((criteriaItem, index) => (
-          <View style={styles.criteriaItem}>
+          <View style={styles.criteriaItem} key={index}>
             <Text>•</Text>
             <Text key={index} style={[fontStyles.body, {marginLeft: 10}]}>{criteriaItem}</Text>
           </View>
