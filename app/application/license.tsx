@@ -39,17 +39,31 @@ export default function License() {
     console.log(isValid)
     if (isValid) {
       const formData = {
-        // userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
-        userID: auth.currentUser!.uid,
+        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
+        // userID: auth.currentUser!.uid,
         type: "License",
         fullName: fullName,
         identityNo: identityNumber,
         collectionOffice: collectionOffice,
+        progress: 0,
+        messages: [{
+          submissionMessage: [
+          new Date(),
+          "Success",
+          "Apllication submitted successfully"
+          ]
+        }],
         personalPhoto: photoFile
       };
+
+
       const reqRef = collection(db,"requests");
       try {
-        await addDoc(reqRef, formData).then(()=> {
+        const reqDoc = await addDoc(reqRef, formData);
+        // uer id ---------------------------------------------------------------------------
+          const userRef = doc(db,"users","pxanKx1FkCcIhByoy6XFGxZgm073");
+          await setDoc(userRef, {licenseApp: reqDoc.id}, {merge : true});
+        
           setFullName("")
           setIdentityNumber("")
           setCollectionOffice("")
@@ -62,7 +76,8 @@ export default function License() {
               onPress: () => router.navigate("/"),
             }]
           );
-        })
+        
+        
       } catch(e) {
         Alert.alert(
           "Submission failed",
@@ -72,6 +87,7 @@ export default function License() {
           }]
         )
       }
+      
     }
   }
 

@@ -11,7 +11,7 @@ import { FormButton } from '../components/form/formButton';
 import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
 import { FIREBASE_DB, FIREBASE_AUTH } from '../../firebaseConfig';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 
 type errorsType = {
   fullName: string,
@@ -45,11 +45,21 @@ export default function NationalID() {
         fullName: fullName,
         identityNo: identityNumber,
         collectionOffice: collectionOffice,
+        progress: 0,
+        messages: [{
+          submissionMessage: [
+          new Date(),
+          "Success",
+          "Apllication submitted successfully"
+          ]
+        }],
         personalPhoto: photoFile
       };
       const reqRef = collection(db,"requests");
       try {
-        await addDoc(reqRef, formData).then(()=> {
+        const reqDoc = await addDoc(reqRef, formData)
+        const userRef = doc(db,"users","pxanKx1FkCcIhByoy6XFGxZgm073");
+          await setDoc(userRef, {nationalIDApp: reqDoc.id}, {merge : true});
           setFullName("")
           setIdentityNumber("")
           setCollectionOffice("")
@@ -62,7 +72,7 @@ export default function NationalID() {
               onPress: () => router.navigate("/"),
             }]
           );
-        })
+        
       } catch(e) {
         Alert.alert(
           "Submission failed",
