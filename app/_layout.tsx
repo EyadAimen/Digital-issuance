@@ -48,7 +48,7 @@ export default function RootLayout() {
 
 	return (
 		<Stack>
-			<Stack.Screen name="authentication/" options={{ title: 'Sign in' }} />
+			<Stack.Screen name="index" options={{ title: 'Sign in' }} />
 			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
 		</Stack>
 	);
