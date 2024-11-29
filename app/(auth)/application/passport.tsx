@@ -3,13 +3,8 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import { useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import { router } from 'expo-router';
-import { fontStyles } from '../../../fonts';
-import { theme } from '../../../theme';
-import { FormInputField } from '../../components/form/formInputField';
-import { FormRadioInputField } from '../../components/form/formRadioInputField';
-import { FormDropdownField } from '../../components/form/formDropdownField';
-import { FormButton } from '../../components/form/formButton';
-import { FormPhotoUpload } from '../../components/form/formPhotoUpload';
+import { FIREBASE_DB, FIREBASE_AUTH } from '../../../firebaseConfig';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 
 type errorsType = {
   fullName: string,
@@ -28,41 +23,60 @@ export default function Passport() {
   const [collectionOffice, setCollectionOffice] = useState<string>();
   const [errors, setErrors] = useState<errorsType>()
   const [photoFile, setPhotoFile] = useState<DocumentPicker.DocumentPickerAsset>()
-
-  const formData = {
-    fullName: "",
-    identityNo: "",
-    passportNo: "",
-    collectionOffice: "",
-    passportphoto: null as DocumentPicker.DocumentPickerAsset | null
-  };
-
   
-  const handleSubmit = () => {
-    // console.log("Full Name: ", fullName)
-    // console.log("Identity No: ", identityNumber)
-    // console.log("Passport No: ", passportNumber)
-    // console.log("Is Abroad: ", isAbroad)
-    if(fullName) formData.fullName = fullName
-    if(identityNumber) formData.identityNo = identityNumber
-    if(passportNumber) formData.passportNo = passportNumber
-    if(collectionOffice) formData.collectionOffice = collectionOffice
-    if(photoFile) formData.passportphoto = photoFile
-
-    console.log("Form Data", formData)
+  const db = FIREBASE_DB;
+  const auth = FIREBASE_AUTH;
+  const handleSubmit = async () => {
     const isValid = validateForm()
 
     if (isValid) {
-      Alert.alert(
-        "Application Submitted",
-        "We will notify you about the application updates",
-        [{
+      const formData = {
+        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
+        // userID: auth.currentUser!.uid,
+        type: "Passport",
+        fullName: fullName,
+        identityNo: identityNumber,
+        passportNo: passportNumber,
+        collectionOffice: collectionOffice,
+        progress: 0,
+        messages: [{
+          submissionMessage: [
+          new Date(),
+          "Success",
+          "Apllication submitted successfully"
+          ]
+        }],
+        personalPhoto: photoFile
+      };
+
+      const reqRef = collection(db,"requests");
+      try {
+        const reqDoc = await addDoc(reqRef, formData)
+        const userRef = doc(db,"users","pxanKx1FkCcIhByoy6XFGxZgm073");
+          await setDoc(userRef, {passportApp: reqDoc.id}, {merge : true});
+          setFullName("")
+          setIdentityNumber("")
+          setCollectionOffice("")
+          setPhotoFile(undefined)
+          Alert.alert(
+            "Application Submitted",
+            "We will notify you about the application updates",
+            [{
+              text: "OK",
+              onPress: () => router.navigate("/"),
+            }]
+          );
+        
+      } catch(e) {
+        Alert.alert(
+          "Submission failed",
+          "Something went wrong",
+          [{
             text: "OK",
-            onPress: () => router.navigate("/"),  
-        }]
-      );
+          }]
+        )
+      }
     }    
-    console.log(isValid)
   }
 
   const validateForm = () => {
@@ -92,8 +106,6 @@ export default function Passport() {
     }
     if(!collectionOffice) errors.collectionOffice = "Collection Office is required"
     if(!photoFile) errors.photoFile = "Personal Photo is required"
-
-    console.log("validate erros => ",errors)
     setErrors(errors)
     if(errors.fullName || errors.collectionOffice || errors.identityNo || errors.passportNo || errors.photoFile) return false
     else return true
