@@ -5,6 +5,13 @@ import * as DocumentPicker from 'expo-document-picker';
 import { router } from 'expo-router';
 import { FIREBASE_DB, FIREBASE_AUTH } from '../../../firebaseConfig';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { fontStyles } from '../../../fonts';
+import { FormInputField } from '../../components/form/formInputField';
+import { FormRadioInputField } from '../../components/form/formRadioInputField';
+import { FormDropdownField } from '../../components/form/formDropdownField';
+import { FormButton } from '../../components/form/formButton';
+import { FormPhotoUpload } from '../../components/form/formPhotoUpload';
+import { theme } from '../../../theme';
 
 type errorsType = {
   fullName: string,
@@ -131,7 +138,7 @@ export default function Passport() {
     <ScrollView style={styles.container}>
         <Text style={fontStyles.body}>Please fill out the details below and ensure all the information are accurate</Text>
         <View style={styles.inputsContainer}>
-            <FormInputField 
+            <FormInputField
               label= "Full Name (as per passport) "
               value= {fullName}
               setValue= {setFullName}
@@ -157,7 +164,7 @@ export default function Passport() {
               value= {isAbroad}
               setValue= {setIsAbroad}
             />
-            <FormDropdownField 
+            <FormDropdownField
               value={collectionOffice}
               setValue={setCollectionOffice}
               filter={isAbroad}
@@ -202,7 +209,7 @@ export default function Passport() {
               upload={uploadDoc}
               error={errors?.photoFile}
             />
-            <FormButton 
+            <FormButton
                 title= "Submit"
                 handlePress= {handleSubmit}
             />
