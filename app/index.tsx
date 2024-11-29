@@ -1,11 +1,11 @@
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { theme } from '../../theme';
-import { FIREBASE_AUTH } from '../../firebaseConfig';
+import { theme } from '../theme';
+import { FIREBASE_AUTH } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { fontStyles } from '../../fonts';
+import { fontStyles } from '../fonts';
 
 export default function SginIn() {
   // Handle the input fields
@@ -55,7 +55,7 @@ export default function SginIn() {
 
           <View style={styles.signUpBox}>
           <Text>Don't have an account? </Text>
-          <Link href={"authentication/signup"} style={styles.signUpText}>Sign up</Link>
+          <Link href={"/signup"} style={styles.signUpText}>Sign up</Link>
           </View>
           </KeyboardAvoidingView>
           <StatusBar style="auto" />

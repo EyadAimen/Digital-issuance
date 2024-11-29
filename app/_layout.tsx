@@ -17,6 +17,7 @@ export default function RootLayout() {
 
 	useEffect(() => {
 		const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+		console.log("USER => ", user)
 		return subscriber;
 	}, []);
 
@@ -47,7 +48,7 @@ export default function RootLayout() {
 
 	return (
 		<Stack>
-			<Stack.Screen name="authetication" options={{ title: 'Sign in' }} />
+			<Stack.Screen name="authentication/" options={{ title: 'Sign in' }} />
 			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
 		</Stack>
 	);

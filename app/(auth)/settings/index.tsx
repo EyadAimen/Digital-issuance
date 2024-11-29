@@ -26,7 +26,7 @@ export default function Settings() {
         "You have signed out successfully",
         [{
           text: "OK",
-          onPress: () => router.navigate("authentication/signin")
+          onPress: () => router.navigate("authentication")
         }]
       );
     });

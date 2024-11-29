@@ -1,10 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import { router } from 'expo-router';
-import { FIREBASE_DB, FIREBASE_AUTH } from '../../../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { FormInputField } from '../../components/form/formInputField';
+import { fontStyles } from '../../../fonts';
+import { FormRadioInputField } from '../../components/form/formRadioInputField';
+import { FormDropdownField } from '../../components/form/formDropdownField';
+import { FormPhotoUpload } from '../../components/form/formPhotoUpload';
+import { FormButton } from '../../components/form/formButton';
+import { theme } from '../../../theme';
 
 type errorsType = {
   fullName: string,

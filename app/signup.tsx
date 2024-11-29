@@ -3,9 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { fontStyles } from '../../fonts';
-import { theme } from '../../theme';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
+import { fontStyles } from '../fonts';
+import { theme } from '../theme';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import {  doc, setDoc } from 'firebase/firestore';
