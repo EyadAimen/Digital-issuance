@@ -39,8 +39,8 @@ export default function NationalID() {
 
     if (isValid) {
       const formData = {
-        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
-        // userID: auth.currentUser!.uid,
+        
+        userID: auth.currentUser!.uid,
         type: "NRIC",
         fullName: fullName,
         identityNo: identityNumber,
