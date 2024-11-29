@@ -1,15 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
-import { fontStyles } from '../../fonts';
-import { theme } from '../../theme';
 import * as DocumentPicker from 'expo-document-picker';
-import { FormInputField } from '../components/form/formInputField';
-import { FormRadioInputField } from '../components/form/formRadioInputField';
-import { FormDropdownField } from '../components/form/formDropdownField';
-import { FormButton } from '../components/form/formButton';
-import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
+import { fontStyles } from '../../../fonts';
+import { theme } from '../../../theme';
+import { FormInputField } from '../../components/form/formInputField';
+import { FormRadioInputField } from '../../components/form/formRadioInputField';
+import { FormDropdownField } from '../../components/form/formDropdownField';
+import { FormButton } from '../../components/form/formButton';
+import { FormPhotoUpload } from '../../components/form/formPhotoUpload';
 
 type errorsType = {
   fullName: string,
@@ -20,10 +20,9 @@ type errorsType = {
   
 }
 
-export default function Passport() {
+export default function NationalID() {
   const [fullName, setFullName] = useState<string>()
   const [identityNumber, setIdentityNumber] = useState<string>()
-  const [passportNumber, setPassportNumber] = useState<string>()
   const [isAbroad, setIsAbroad] = useState<boolean>(false)
   const [collectionOffice, setCollectionOffice] = useState<string>();
   const [errors, setErrors] = useState<errorsType>()
@@ -32,9 +31,8 @@ export default function Passport() {
   const formData = {
     fullName: "",
     identityNo: "",
-    passportNo: "",
     collectionOffice: "",
-    passportphoto: null as DocumentPicker.DocumentPickerAsset | null
+    personalPhoto: null as DocumentPicker.DocumentPickerAsset | null
   };
 
   
@@ -45,14 +43,17 @@ export default function Passport() {
     // console.log("Is Abroad: ", isAbroad)
     if(fullName) formData.fullName = fullName
     if(identityNumber) formData.identityNo = identityNumber
-    if(passportNumber) formData.passportNo = passportNumber
     if(collectionOffice) formData.collectionOffice = collectionOffice
-    if(photoFile) formData.passportphoto = photoFile
+    if(photoFile) formData.personalPhoto = photoFile
 
     console.log("Form Data", formData)
     const isValid = validateForm()
 
     if (isValid) {
+      setFullName("")
+      setIdentityNumber("")
+      setCollectionOffice("")
+      setPhotoFile(undefined)
       Alert.alert(
         "Application Submitted",
         "We will notify you about the application updates",
@@ -86,10 +87,6 @@ export default function Passport() {
     else if (!idPattern.test(identityNumber)) {
       errors.identityNo = "Identification Number must be exactly 12 digits (E.g 970201141234)";
     }
-    if(!passportNumber) errors.passportNo = "Passport Number is required"
-    else if (!passportPattern.test(passportNumber)) {
-      errors.passportNo = "The Passport Number must start with either 'A,' 'H,' or 'K,' followed by exactly 8 digits (e.g., A02667184).";
-    }
     if(!collectionOffice) errors.collectionOffice = "Collection Office is required"
     if(!photoFile) errors.photoFile = "Personal Photo is required"
 
@@ -120,7 +117,7 @@ export default function Passport() {
         <Text style={fontStyles.body}>Please fill out the details below and ensure all the information are accurate</Text>
         <View style={styles.inputsContainer}>
             <FormInputField 
-              label= "Full Name (as per passport) "
+              label= "Full Name (as per national ID) "
               value= {fullName}
               setValue= {setFullName}
               placeholder= "E.g Muhammad Amir bin Abdullah"
@@ -133,13 +130,6 @@ export default function Passport() {
               placeholder= "E.g 970201141234"
               error= {errors?.identityNo? errors.identityNo: ""}
             />
-            <FormInputField 
-              label= "No. Current Passport"
-              value= {passportNumber}
-              setValue= {setPassportNumber}
-              placeholder= "E.g A02667184"
-              error= {errors?.passportNo? errors.passportNo: ""}
-            />
             <FormRadioInputField 
               label= "Collection Office"
               value= {isAbroad}
@@ -151,7 +141,7 @@ export default function Passport() {
               filter={isAbroad}
               error= {errors?.collectionOffice? errors.collectionOffice: ""}
             />
-          <View style={styles.specifcationContianer}>
+<View style={styles.specifcationContianer}>
             <Text style={fontStyles.subHeading}>Personal photo specification</Text>
             <View style={styles.specifcationTextContainer}>
               <View style={styles.specifcationItem}>

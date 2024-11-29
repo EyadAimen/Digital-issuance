@@ -1,15 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
-import { fontStyles } from '../../fonts';
-import { theme } from '../../theme';
 import * as DocumentPicker from 'expo-document-picker';
-import { FormInputField } from '../components/form/formInputField';
-import { FormRadioInputField } from '../components/form/formRadioInputField';
-import { FormDropdownField } from '../components/form/formDropdownField';
-import { FormButton } from '../components/form/formButton';
-import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
+import { fontStyles } from '../../../fonts';
+import { theme } from '../../../theme';
+import { FormInputField } from '../../components/form/formInputField';
+import { FormRadioInputField } from '../../components/form/formRadioInputField';
+import { FormDropdownField } from '../../components/form/formDropdownField';
+import { FormButton } from '../../components/form/formButton';
+import { FormPhotoUpload } from '../../components/form/formPhotoUpload';
 
 type errorsType = {
   fullName: string,

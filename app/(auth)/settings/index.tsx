@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View, Button } from 'react-native';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
 import { signOut } from 'firebase/auth';
 import { router } from 'expo-router';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import { FormButton } from '../components/form/formButton';
+import { FormButton } from '../../components/form/formButton';
 
 export default function Settings() {
   const [userData, setUserData] = useState<any>(null); // State to store the fetched data
@@ -32,7 +32,7 @@ export default function Settings() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userDocRef = doc(db, "users", auth.currentUser!.uid);
+        const userDocRef = doc(db, "users", "pxanKx1FkCcIhByoy6XFGxZgm073");
         const docSnapshot = await getDoc(userDocRef); 
         
         if (docSnapshot.exists()) {

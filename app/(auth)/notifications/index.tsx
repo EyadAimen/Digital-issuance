@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { NotificationMessageComponent } from '../components/notificationMessageComponent';
+import { NotificationMessageComponent } from '../../components/notificationMessageComponent';
 
 export default function Notifications() {
   return (
