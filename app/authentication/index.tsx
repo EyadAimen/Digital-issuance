@@ -1,11 +1,11 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { theme } from '../theme';
-import { FIREBASE_AUTH } from '../firebaseConfig';
+import { theme } from '../../theme';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { fontStyles } from '../fonts';
+import { fontStyles } from '../../fonts';
 
 export default function SginIn() {
   // Handle the input fields
@@ -17,8 +17,7 @@ export default function SginIn() {
 
   const handleSignIn = async() => {
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password).then(()=>{alert("signed in")});
-      
+      await signInWithEmailAndPassword(auth, email, password).then(()=>{alert("signed in"); router.navigate("/(auth)")});
     } catch(e: any) {
       alert('Sign in failed' + e.message);
     }

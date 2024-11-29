@@ -9,6 +9,7 @@ import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import {  doc, setDoc } from 'firebase/firestore';
+import { router } from 'expo-router';
 
 
 export default function SignUp() {
@@ -26,7 +27,7 @@ export default function SignUp() {
   
   const handleSignUp = async() => {
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password).then(async () => {
+      await createUserWithEmailAndPassword(auth, email, password).then(async () => {
         try {
           const userData = {
             userName: userName,
@@ -35,7 +36,7 @@ export default function SignUp() {
             phone: phone
           }
           const userRef = doc(db,"users",auth.currentUser!.uid);
-          await setDoc(userRef, userData);
+          await setDoc(userRef, userData).then(()=> {router.navigate("/(auth)")});
         } catch(e) {
           alert("something went wrong");
         }
