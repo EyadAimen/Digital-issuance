@@ -39,8 +39,8 @@ export default function License() {
     console.log(isValid)
     if (isValid) {
       const formData = {
-        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
-        // userID: auth.currentUser!.uid,
+        
+        userID: auth.currentUser!.uid,
         type: "License",
         fullName: fullName,
         identityNo: identityNumber,

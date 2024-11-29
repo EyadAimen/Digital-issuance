@@ -1,24 +1,25 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { useEffect, useState } from 'react';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import  { onAuthStateChanged, User } from 'firebase/auth';
 import { View, ActivityIndicator } from 'react-native';
+import { FIREBASE_AUTH } from '../firebaseConfig';
 
 export default function RootLayout() {
 	const [initializing, setInitializing] = useState(true);
-	const [user, setUser] = useState<FirebaseAuthTypes.User | null>();
+	const [user, setUser] = useState<User | null>();
 	const router = useRouter();
 	const segments = useSegments();
-
-	const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-		console.log('onAuthStateChanged', user);
-		setUser(user);
-		if (initializing) setInitializing(false);
-	};
+	const auth = FIREBASE_AUTH
+	
 
 	useEffect(() => {
-		const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+		onAuthStateChanged(auth, (currentUser) => {
+			if(currentUser) { setUser(currentUser) }
+			else { setUser(null) }
+			setInitializing(false)
+		});
 		console.log("USER => ", user)
-		return subscriber;
+		
 	}, []);
 
 	useEffect(() => {

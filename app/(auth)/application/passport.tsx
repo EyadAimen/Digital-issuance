@@ -38,8 +38,8 @@ export default function Passport() {
 
     if (isValid) {
       const formData = {
-        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
-        // userID: auth.currentUser!.uid,
+        
+        userID: auth.currentUser!.uid,
         type: "Passport",
         fullName: fullName,
         identityNo: identityNumber,

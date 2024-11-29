@@ -22,7 +22,7 @@ export default function App() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userDocRef = doc(db, "users", "pxanKx1FkCcIhByoy6XFGxZgm073");
+        const userDocRef = doc(db, "users", auth.currentUser!.uid);
         const docSnapshot = await getDoc(userDocRef);
         
         if (docSnapshot.exists()) {

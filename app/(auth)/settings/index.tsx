@@ -17,7 +17,7 @@ export default function Settings() {
   const [changePassword, setChangePassword] = useState(false);
   const auth = FIREBASE_AUTH;
   const db = FIREBASE_DB;
-  const userDocRef = doc(db, "users", "pxanKx1FkCcIhByoy6XFGxZgm073");
+  const userDocRef = doc(db, "users", auth.currentUser!.uid);
   // Handle sign-out function
   const handleSignOut = async () => {
     await signOut(auth).then(() => {
@@ -26,7 +26,7 @@ export default function Settings() {
         "You have signed out successfully",
         [{
           text: "OK",
-          onPress: () => router.navigate("authentication")
+          onPress: () => router.replace("/")
         }]
       );
     });
