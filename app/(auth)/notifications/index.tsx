@@ -1,10 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-<<<<<<< Updated upstream:app/notifications/index.tsx
-import { NotificationMessageComponent } from '../components/notificationMessageComponent';
-=======
-import NotificationMessageComponent from '../../components/notificationMessageComponent';
->>>>>>> Stashed changes:app/(auth)/notifications/index.tsx
+import { NotificationMessageComponent } from '../../components/notificationMessageComponent';
 
 export default function Notifications() {
   return (

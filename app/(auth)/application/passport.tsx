@@ -1,27 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
-import { fontStyles } from '../../fonts';
-import { theme } from '../../theme';
 import * as DocumentPicker from 'expo-document-picker';
-import { FormInputField } from '../components/form/formInputField';
-import { FormRadioInputField } from '../components/form/formRadioInputField';
-import { FormDropdownField } from '../components/form/formDropdownField';
-import { FormButton } from '../components/form/formButton';
-import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
-import { FIREBASE_DB, FIREBASE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-<<<<<<< Updated upstream:app/application/national_id.tsx
-=======
+import { FormInputField } from '../../components/form/formInputField';
 import { fontStyles } from '../../../fonts';
+import { FormRadioInputField } from '../../components/form/formRadioInputField';
+import { FormDropdownField } from '../../components/form/formDropdownField';
+import { FormPhotoUpload } from '../../components/form/formPhotoUpload';
+import { FormButton } from '../../components/form/formButton';
 import { theme } from '../../../theme';
-import FormInputField  from '../../components/form/formInputField';
-import FormRadioInputField from '../../components/form/formRadioInputField';
-import FormDropdownField from '../../components/form/formDropdownField';
-import FormPhotoUpload from '../../components/form/formPhotoUpload';
-import FormButton from '../../components/form/formButton';
->>>>>>> Stashed changes:app/(auth)/application/national_id.tsx
 
 type errorsType = {
   fullName: string,
@@ -32,28 +22,28 @@ type errorsType = {
   
 }
 
-export default function NationalID() {
+export default function Passport() {
   const [fullName, setFullName] = useState<string>()
   const [identityNumber, setIdentityNumber] = useState<string>()
+  const [passportNumber, setPassportNumber] = useState<string>()
   const [isAbroad, setIsAbroad] = useState<boolean>(false)
   const [collectionOffice, setCollectionOffice] = useState<string>();
   const [errors, setErrors] = useState<errorsType>()
   const [photoFile, setPhotoFile] = useState<DocumentPicker.DocumentPickerAsset>()
-
+  
   const db = FIREBASE_DB;
   const auth = FIREBASE_AUTH;
-  
   const handleSubmit = async () => {
-
     const isValid = validateForm()
 
     if (isValid) {
       const formData = {
-        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
-        // userID: auth.currentUser!.uid,
-        type: "NRIC",
+        
+        userID: auth.currentUser!.uid,
+        type: "Passport",
         fullName: fullName,
         identityNo: identityNumber,
+        passportNo: passportNumber,
         collectionOffice: collectionOffice,
         progress: 0,
         messages: [{
@@ -65,11 +55,12 @@ export default function NationalID() {
         }],
         personalPhoto: photoFile
       };
+
       const reqRef = collection(db,"requests");
       try {
         const reqDoc = await addDoc(reqRef, formData)
         const userRef = doc(db,"users","pxanKx1FkCcIhByoy6XFGxZgm073");
-          await setDoc(userRef, {nationalIDApp: reqDoc.id}, {merge : true});
+          await setDoc(userRef, {passportApp: reqDoc.id}, {merge : true});
           setFullName("")
           setIdentityNumber("")
           setCollectionOffice("")
@@ -92,7 +83,7 @@ export default function NationalID() {
           }]
         )
       }
-    }
+    }    
   }
 
   const validateForm = () => {
@@ -116,9 +107,12 @@ export default function NationalID() {
     else if (!idPattern.test(identityNumber)) {
       errors.identityNo = "Identification Number must be exactly 12 digits (E.g 970201141234)";
     }
+    if(!passportNumber) errors.passportNo = "Passport Number is required"
+    else if (!passportPattern.test(passportNumber)) {
+      errors.passportNo = "The Passport Number must start with either 'A,' 'H,' or 'K,' followed by exactly 8 digits (e.g., A02667184).";
+    }
     if(!collectionOffice) errors.collectionOffice = "Collection Office is required"
     if(!photoFile) errors.photoFile = "Personal Photo is required"
-
     setErrors(errors)
     if(errors.fullName || errors.collectionOffice || errors.identityNo || errors.passportNo || errors.photoFile) return false
     else return true
@@ -145,7 +139,7 @@ export default function NationalID() {
         <Text style={fontStyles.body}>Please fill out the details below and ensure all the information are accurate</Text>
         <View style={styles.inputsContainer}>
             <FormInputField 
-              label= "Full Name (as per national ID) "
+              label= "Full Name (as per passport) "
               value= {fullName}
               setValue= {setFullName}
               placeholder= "E.g Muhammad Amir bin Abdullah"
@@ -158,6 +152,13 @@ export default function NationalID() {
               placeholder= "E.g 970201141234"
               error= {errors?.identityNo? errors.identityNo: ""}
             />
+            <FormInputField 
+              label= "No. Current Passport"
+              value= {passportNumber}
+              setValue= {setPassportNumber}
+              placeholder= "E.g A02667184"
+              error= {errors?.passportNo? errors.passportNo: ""}
+            />
             <FormRadioInputField 
               label= "Collection Office"
               value= {isAbroad}
@@ -169,7 +170,7 @@ export default function NationalID() {
               filter={isAbroad}
               error= {errors?.collectionOffice? errors.collectionOffice: ""}
             />
-<View style={styles.specifcationContianer}>
+          <View style={styles.specifcationContianer}>
             <Text style={fontStyles.subHeading}>Personal photo specification</Text>
             <View style={styles.specifcationTextContainer}>
               <View style={styles.specifcationItem}>
