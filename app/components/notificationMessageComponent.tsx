@@ -8,7 +8,7 @@ type props = {
     message: string,
 }
 
-export function NotificationMessageComponent({ date, status, statusMessage, message }: props) {
+export default function NotificationMessageComponent({ date, status, statusMessage, message }: props) {
     return(
     <View style={styles.card}>
         <Text 

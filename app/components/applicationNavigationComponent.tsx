@@ -10,7 +10,7 @@ type props = {
     onPress: () => void,
 }
 
-export function ApplicationNavigationComponent({ appName, onPress }: props) {
+export default function ApplicationNavigationComponent({ appName, onPress }: props) {
 
     return (
         <TouchableOpacity 

@@ -9,7 +9,7 @@ type props = {
 }
 
 
-export function ApplicationStatusCard({application, progress, updateMessage}: props) {
+export default function ApplicationStatusCard({application, progress, updateMessage}: props) {
     return (
         <View style={styles.card}>
             <Text style={styles.text}>{application}</Text>

@@ -1,8 +1,15 @@
 import { router, useLocalSearchParams } from 'expo-router';
+<<<<<<< Updated upstream:app/application/eligibility-criteria.tsx
 import { View, Text, Button, StyleSheet, Pressable } from 'react-native';
 import { fontStyles } from '../../fonts';
 import { theme } from '../../theme';
 import { FormButton } from '../components/form/formButton';
+=======
+import { fontStyles } from '../../../fonts';
+import { theme } from '../../../theme';
+import FormButton from '../../components/form/formButton';
+import { StyleSheet, Text, View } from 'react-native';
+>>>>>>> Stashed changes:app/(auth)/application/eligibility-criteria.tsx
 
 type DocumentType = 'passport' | 'license' | 'national_id';
 

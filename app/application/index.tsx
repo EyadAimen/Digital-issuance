@@ -1,9 +1,15 @@
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+<<<<<<< Updated upstream:app/application/index.tsx
 import { ApplicationNavigationComponent } from '../components/applicationNavigationComponent';
 import { theme } from '../../theme';
 import { fontStyles } from '../../fonts';
+=======
+import ApplicationNavigationComponent  from '../../components/applicationNavigationComponent';
+import { theme } from '../../../theme';
+import { fontStyles } from '../../../fonts';
+>>>>>>> Stashed changes:app/(auth)/application/index.tsx
 
 export default function Application() {
   const router = useRouter();

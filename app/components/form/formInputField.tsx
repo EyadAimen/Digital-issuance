@@ -5,11 +5,11 @@ type formInputProps = {
     label: string,
     placeholder: string,
     value: string | undefined,
-    setValue: React.Dispatch<React.SetStateAction<string | undefined>>
+    setValue: React.Dispatch<React.SetStateAction<string>> | React.Dispatch<React.SetStateAction<string | undefined>>
     error?: string
 }
 
-export function FormInputField({ label, placeholder, value, setValue, error }: formInputProps) {
+export default function FormInputField({ label, placeholder, value, setValue, error }: formInputProps) {
     return (
         <View style={styles.inputContianer}>
             <Text>{label}<Text style={{ color: theme.failColor }}>*</Text></Text>

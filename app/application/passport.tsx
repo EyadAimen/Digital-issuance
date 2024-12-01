@@ -12,6 +12,16 @@ import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
 import { FIREBASE_DB, FIREBASE_AUTH } from '../../firebaseConfig';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+<<<<<<< Updated upstream:app/application/passport.tsx
+=======
+import FormInputField from '../../components/form/formInputField';
+import FormRadioInputField from '../../components/form/formRadioInputField';
+import FormDropdownField from '../../components/form/formDropdownField';
+import FormPhotoUpload from '../../components/form/formPhotoUpload';
+import FormButton from '../../components/form/formButton';
+import { fontStyles } from '../../../fonts';
+import { theme } from '../../../theme';
+>>>>>>> Stashed changes:app/(auth)/application/passport.tsx
 
 type errorsType = {
   fullName: string,

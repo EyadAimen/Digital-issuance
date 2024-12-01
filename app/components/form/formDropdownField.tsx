@@ -10,7 +10,7 @@ type formDropdownProps = {
     error?: string
 }
 
-export function FormDropdownField({value, filter, setValue, error}: formDropdownProps){
+export default function FormDropdownField({value, filter, setValue, error}: formDropdownProps){
     const [isFocus, setIsFocus] = useState(false);
     const collectionOffices = [
       { name: "ALOR SETAR", isAbroad: false },
