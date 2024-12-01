@@ -2,12 +2,11 @@ import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { theme } from '../../theme';
-import { ApplicationStatusCard } from '../components/applicationStatusCard';
-import { FormButton } from '../components/form/formButton';
 import { useEffect, useState } from 'react';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import ApplicationStatusCard from '../components/applicationStatusCard';
 
 export default function App() {
   const [userData, setUserData] = useState<any>(null);
