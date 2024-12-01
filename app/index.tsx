@@ -6,6 +6,7 @@ import { FIREBASE_AUTH } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { fontStyles } from '../fonts';
+import FormButton from './components/form/formButton';
 
 
 export default function SginIn() {
@@ -48,11 +49,10 @@ export default function SginIn() {
                 secureTextEntry={true}
               />
             </View>
-
-          <Pressable style={styles.buttonStyle} onPress={handleSignIn}>
-            <Text style={[fontStyles.buttonLabels, {color:theme.whiteColor}]}>Sign in</Text>
-          </Pressable>
-
+          <FormButton 
+            title='Sign in'
+            handlePress={handleSignIn}
+          />
           <View style={styles.signUpBox}>
           <Text>Don't have an account? </Text>
           <Link href={"/signup"} style={styles.signUpText}>Sign up</Link>

@@ -3,7 +3,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs, onSnapshot, setDoc } from 'firebase/firestore';
 import { Alert, StyleSheet, Text, View, Button, Pressable } from 'react-native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { fontStyles } from '../../../fonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { theme } from '../../../theme';
@@ -45,9 +45,36 @@ export default function Settings() {
     )
   }
 
-  const handleChangePassword = () => {
-    console.log("Change Password")
-  }
+  const handleChangePassword = async () => {
+    const email = FIREBASE_AUTH.currentUser?.email;
+
+    if (email)
+  
+    Alert.alert(
+      "Change Password",
+      "Are you sure you want to reset your password? An email with a reset link will be sent to your registered email address.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              await sendPasswordResetEmail(FIREBASE_AUTH, email);
+              Alert.alert("Success", "A password reset link has been sent to your email.", [{ text: "OK" }]);
+            } catch (error: any) {
+              console.error("Error sending password reset email:", error);
+              Alert.alert("Error", error.message || "Failed to send the password reset email.", [{ text: "OK" }]);
+            }
+          },
+          style: "default",
+        },
+      ]
+    )
+    }
+  
 
   // handle the change submit
   const handleChange = async () => {
@@ -97,7 +124,7 @@ export default function Settings() {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.settingsItemContainer}>
-          <Pressable style={styles.settingsItem} onPress={() => router.navigate("/settings/update_password")}>
+          <Pressable style={styles.settingsItem} onPress={handleChangePassword}>
             <AntDesign name="lock1" size={28} color={theme.blackText} />
             <Text style={fontStyles.subHeading}>Change Password</Text>
           </Pressable>
