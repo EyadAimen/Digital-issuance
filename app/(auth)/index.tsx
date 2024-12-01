@@ -7,7 +7,7 @@ import { FormButton } from '../components/form/formButton';
 import { useEffect, useState } from 'react';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { collection, doc, getDoc } from 'firebase/firestore';
-import { User } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 export default function App() {
   const [userData, setUserData] = useState<any>(null);
@@ -17,7 +17,10 @@ export default function App() {
 
   const auth = FIREBASE_AUTH;
   const db = FIREBASE_DB;
- 
+  
+  onAuthStateChanged(auth, (user) => {
+    if (!user) router.replace("/")  
+  })
  
   useEffect(() => {
     const fetchUserData = async () => {

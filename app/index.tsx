@@ -1,4 +1,4 @@
-import { Link, router } from 'expo-router';
+import { Link, router, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { theme } from '../theme';
@@ -7,17 +7,17 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { fontStyles } from '../fonts';
 
+
 export default function SginIn() {
   // Handle the input fields
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  
 
   const auth = FIREBASE_AUTH;
 
   const handleSignIn = async() => {
     try {
-      await signInWithEmailAndPassword(auth, email, password).then(()=>{alert("signed in"); router.navigate("/(auth)")});
+      await signInWithEmailAndPassword(auth, email, password).then(()=>{alert("signed in");});
     } catch(e: any) {
       alert('Sign in failed' + e.message);
     }

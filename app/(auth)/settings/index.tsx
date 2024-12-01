@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SetStateAction, useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View, Button } from 'react-native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
-import { signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { router } from 'expo-router';
 import { collection, doc, getDoc, getDocs, onSnapshot, setDoc } from 'firebase/firestore';
 import { FormButton } from '../../components/form/formButton';
@@ -15,22 +15,20 @@ export default function Settings() {
   const [userName, setUserName] = useState<string>();
   const [showDetails, setSHowDetails] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
+  const [userLogged, setUserLogged] = useState(false);
   const auth = FIREBASE_AUTH;
   const db = FIREBASE_DB;
   const userDocRef = doc(db, "users", auth.currentUser!.uid);
+  
   // Handle sign-out function
   const handleSignOut = async () => {
-    await signOut(auth).then(() => {
-      Alert.alert(
-        "Success",
-        "You have signed out successfully",
-        [{
-          text: "OK",
-          onPress: () => router.replace("/")
-        }]
-      );
-    });
-  };
+    try {
+      await signOut(FIREBASE_AUTH);
+      console.log("User signed out successfully");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  }
 
   // handle the change submit
   const handleChange = async () => {
