@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { fontStyles } from '../../../fonts';
 import { theme } from '../../../theme';
-import { FormButton } from '../../components/form/formButton';
+import FormButton from '../../components/form/formButton';
 import { StyleSheet, Text, View } from 'react-native';
 
 type DocumentType = 'passport' | 'license' | 'national_id';

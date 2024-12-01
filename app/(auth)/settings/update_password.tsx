@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native"
-import FormInputField from "../../components/form/formInputField"
 import { theme } from "../../../theme"
 import { useState } from "react"
+import FormInputField from "../../components/form/formInputField"
 import FormButton from "../../components/form/formButton"
 
 export default function UpdatePassword() {

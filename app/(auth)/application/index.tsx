@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { ApplicationNavigationComponent } from '../../components/applicationNavigationComponent';
+import ApplicationNavigationComponent from '../../components/applicationNavigationComponent';
 import { theme } from '../../../theme';
 import { fontStyles } from '../../../fonts';
 
