@@ -9,7 +9,6 @@ type props = {
     updateMessage: string;
 }
 
-
 export default function ApplicationStatusCard({application, progress, updateMessage}: props) {
     return (
         <View style={styles.card}>
@@ -75,12 +74,6 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: theme.primaryBlue,
         borderRadius: 8,
-    },
-    text: {
-        color: theme.whiteColor,
-        marginBottom:5,
-        fontSize: 20,
-        fontWeight: "400"
     },
     cardButton: {
         paddingVertical: 8,
