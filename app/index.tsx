@@ -1,12 +1,13 @@
 import { Link, router, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { theme } from '../theme';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { fontStyles } from '../fonts';
 import FormButton from './components/form/formButton';
+import FormInputField from './components/form/formInputField';
 
 
 export default function SginIn() {
@@ -18,9 +19,15 @@ export default function SginIn() {
 
   const handleSignIn = async() => {
     try {
-      await signInWithEmailAndPassword(auth, email, password).then(()=>{alert("signed in");});
+      await signInWithEmailAndPassword(auth, email, password);
     } catch(e: any) {
-      alert('Sign in failed' + e.message);
+      Alert.alert(
+        "Sign in failed",
+        e.message,
+        [{
+          text: "Ok"
+        }]
+      );
     }
   }
   
@@ -28,27 +35,11 @@ export default function SginIn() {
     <View style={styles.container}>
       <KeyboardAvoidingView behavior='position' >
             {/* Email */}
-            <View style={styles.inputContianer}>
-              <Text>Email<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={email}
-                style={styles.textInput}
-                onChangeText={setEmail}
-                placeholder="E.g muhammad@gmail.com"
-              />
-            </View>
+            <FormInputField label={'Email'} placeholder={"E.g muhammad@gmail.com"} value={email} setValue={setEmail} />
             
             {/* Passowrd */}
-            <View style={styles.inputContianer}>
-              <Text>Password<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={password}
-                style={styles.textInput}
-                onChangeText={setPassword}
-                placeholder="E.g Password123"
-                secureTextEntry={true}
-              />
-            </View>
+            <FormInputField label={'Password'} placeholder={"E.g Password123"} value={password} setValue={setPassword} isSecure={true} />
+
           <FormButton 
             title='Sign in'
             handlePress={handleSignIn}

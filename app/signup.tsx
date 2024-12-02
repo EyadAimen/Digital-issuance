@@ -10,6 +10,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import {  doc, setDoc } from 'firebase/firestore';
 import { router } from 'expo-router';
+import FormInputField from './components/form/formInputField';
+import FormButton from './components/form/formButton';
 
 
 export default function SignUp() {
@@ -49,95 +51,32 @@ export default function SignUp() {
   
   return (
     <ScrollView style={styles.container} >
-        <KeyboardAvoidingView behavior='position' >
+        <KeyboardAvoidingView behavior='padding' >
         
-        <View style={styles.inputsContainer}>
             {/* User name */}
-            <View style={styles.inputContianer}>
-              <Text>User Name <Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={userName}
-                style={styles.textInput}
-                onChangeText={setUserName}
-                placeholder="E.g Muhammad"
-              />
-            </View>
-
-
+            <FormInputField label={'User Name'} placeholder={'E.g Muhammad'} value={userName} setValue={setUserName} />
+            
             {/* Full name */}
-            <View style={styles.inputContianer}>
-              <Text>Full Name <Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={fullName}
-                style={styles.textInput}
-                onChangeText={setFullName}
-                placeholder="E.g Muhammad Amir bin Abdullah"
-              />
-            </View>
-            
+              <FormInputField label={'Full Name'} placeholder={'E.g Muhammad Amir bin Abdullah'} value={fullName} setValue={setFullName} />
+              
             {/* Email */}
-            <View style={styles.inputContianer}>
-              <Text>Email<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={email}
-                style={styles.textInput}
-                onChangeText={setEmail}
-                placeholder="E.g muhammad@gmail.com"
-              />
-            </View>
-
-
-            {/* Identification No */}
-            <View style={styles.inputContianer}>
-              <Text>NRIC/Passoprt Number<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={identityNumber}
-                style={styles.textInput}
-                onChangeText={setIdentityNumber}
-                placeholder="E.g 970201141234"
-              />
-            </View>
-
-            {/* Identification No */}
-            <View style={styles.inputContianer}>
-              <Text>Phone number<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={phone}
-                style={styles.textInput}
-                onChangeText={setPhone}
-                placeholder="E.g +60112121112"
-              />
-            </View>
             
-            {/* Passowrd */}
-            <View style={styles.inputContianer}>
-              <Text>Password<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={password}
-                style={styles.textInput}
-                onChangeText={setPassword}
-                placeholder="E.g Password123"
-                secureTextEntry={true}
-              />
-            </View>
+            <FormInputField label={'Email'} placeholder={"E.g muhammad@gmail.com"} value={email} setValue={setEmail} />
+          
+            {/* Identification No */}
+            <FormInputField label={'NRIC/Passoprt Number'} placeholder={"E.g 970201141234"} value={identityNumber} setValue={setIdentityNumber} />
+            
+            {/* Identification No */}
+            <FormInputField label={'Phone number'} placeholder={"E.g +60112121112"} value={phone} setValue={setPhone} />
+            
+
+            {/* Password */}
+            <FormInputField label={'Password'} placeholder={"E.g Password123"} value={password} setValue={setPassword} isSecure={true} />
 
             {/* Confirm passowrd */}
-            <View style={styles.inputContianer}>
-              <Text>Password<Text style={{color:theme.failColor}}>*</Text></Text>
-              <TextInput
-                value={confirmPassword}
-                style={styles.textInput}
-                onChangeText={setConfirmPassword}
-                placeholder="E.g Password123"
-                secureTextEntry={true}
-              />
-            </View>
-          
-          <Pressable style={styles.buttonStyle} onPress={handleSignUp}>
-            <Text style={[fontStyles.buttonLabels, {color:theme.whiteColor}]}>Sign up</Text>
-          </Pressable>
-          
-        </View>
+            <FormInputField label={'Confirm Password'} placeholder={"E.g Password123"} value={confirmPassword} setValue={setConfirmPassword} isSecure={true} />
+
+            <FormButton title={'Sign up'} handlePress={handleSignUp} />
       <StatusBar style="auto" />
       </KeyboardAvoidingView>
     </ScrollView>
@@ -152,45 +91,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     gap: 48,
   },
-  inputsContainer: {
-    marginTop: 32,
-    gap:12,
-  },
-  inputContianer: {
-    display: "flex",
-    gap: 8,
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-  },
-  textInput: {    
-    borderColor: theme.grey2Text,
-    borderWidth: 1,
-    alignSelf: "stretch",
-    padding: 10,
-    fontSize: 16,
-    marginBottom: 12,
-    borderRadius: 6,
-  },
-  buttonStyle: {
-    backgroundColor: theme.primaryBlue,
-    paddingVertical: 16,
-    paddingHorizontal: 10,
-    alignItems: "center",
-    borderRadius: 6,
-    marginTop: 20,
-  },
-
-  label: {
-    position: 'absolute',
-    backgroundColor: 'white',
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  
 });

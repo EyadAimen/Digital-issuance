@@ -23,11 +23,12 @@ export default function NotificationMessageComponent({ date, status, title, mess
 
 const styles = StyleSheet.create({
     dateText: {
-        color: theme.blackText,
-        fontSize: 18,
+        color: theme.whiteColor,
+        fontSize: 16,
         backgroundColor: theme.primaryBlue,
         paddingHorizontal:20,
-        marginBottom: 5
+        marginBottom: 5,
+        padding: 5
     },
     messageText: {
         color: theme.greyText,

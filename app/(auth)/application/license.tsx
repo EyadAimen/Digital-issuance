@@ -50,7 +50,7 @@ export default function License() {
       
       const initialMessage = {
         date: new Date(),
-        status: "success",
+        status: "Success",
         message: "Application submitted successfully"
       };
       

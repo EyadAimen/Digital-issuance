@@ -6,10 +6,11 @@ type formInputProps = {
     placeholder: string,
     value: string | undefined,
     setValue: React.Dispatch<React.SetStateAction<string>> | React.Dispatch<React.SetStateAction<string | undefined>>
-    error?: string
+    error?: string,
+    isSecure?: boolean
 }
 
-export default function FormInputField({ label, placeholder, value, setValue, error }: formInputProps) {
+export default function FormInputField({ label, placeholder, value, setValue, error, isSecure }: formInputProps) {
     return (
         <View style={styles.inputContianer}>
             <Text>{label}<Text style={{ color: theme.failColor }}>*</Text></Text>
@@ -18,6 +19,7 @@ export default function FormInputField({ label, placeholder, value, setValue, er
                 style={[styles.textInput, error ? styles.inputError : null]}
                 onChangeText={setValue}
                 placeholder={placeholder}
+                secureTextEntry={isSecure? true: false}
             />
             {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
