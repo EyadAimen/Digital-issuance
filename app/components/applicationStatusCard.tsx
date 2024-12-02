@@ -4,12 +4,13 @@ import { ProgressBar } from "@react-native-community/progress-bar-android";
 import { fontStyles } from "../../fonts";
 
 type props = {
-    application: string;
-    progress: number;
-    updateMessage: string;
+    application: string
+    progress: number
+    updateMessage: string
+    onPress: (application: any) => void
 }
 
-export default function ApplicationStatusCard({application, progress, updateMessage}: props) {
+export default function ApplicationStatusCard({application, progress, updateMessage, onPress}: props) {
     return (
         <View style={styles.card}>
             <View style={styles.topContainer}>
@@ -31,7 +32,7 @@ export default function ApplicationStatusCard({application, progress, updateMess
                         ]}
                     />
                     </View>
-                <Pressable style={styles.cardButton}>
+                <Pressable style={styles.cardButton} onPress={onPress}>
                     <Text style={[fontStyles.tabLabels, {color:theme.whiteColor}]}>
                         View Details
                     </Text>
