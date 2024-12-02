@@ -112,7 +112,6 @@ export default function App() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={theme.primaryBlue} />
-        <Text style={styles.loadingText}>Fetching data...</Text>
       </View>
     );
   }
