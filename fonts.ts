@@ -4,7 +4,7 @@ import { TextStyle } from "react-native";
 export const fontStyles: { [key: string]: TextStyle } = {
     baseStyle: {
         color: theme.blackText,
-        fontFamily: 'Roboto'
+        // fontFamily: 'Roboto'
     },
     mainHeading : {
         fontSize: 32,

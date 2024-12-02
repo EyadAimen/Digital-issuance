@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-
-
 import { useEffect, useState } from 'react';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
-
+import { Image } from 'expo-image';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import NotificationMessageComponent from '../../components/notificationMessageComponent';
+import { theme } from '../../../theme';
+import { fontStyles } from '../../../fonts';
 
 export default function Notifications() {
   const auth = FIREBASE_AUTH;
@@ -24,6 +24,9 @@ export default function Notifications() {
   }
   const initialList : Message[] = [];
   const [notificationsList, setNotificationList] = useState<Message>(); 
+  const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -84,7 +87,6 @@ export default function Notifications() {
   return (
     <View style={styles.container}>
       <ScrollView>
-
       {licenseData ? (
         <NotificationMessageComponent
         date={licenseData.messages.slice(-1)[0].submissionMessage[0].toDate()} 
@@ -111,6 +113,21 @@ export default function Notifications() {
           message={nationalData.messages.slice(-1)[0].submissionMessage[2]}
         />
       ) : null}
+
+      {(!licenseData && !passportData && !nationalData)?
+        <View style={styles.emptyContainer}>
+          <Image
+            style={styles.image}
+            source={require("../../../assets/bell.png")}
+            // placeholder={{ blurhash }}
+            contentFit="cover"
+            transition={1000}
+          />
+          <Text style={fontStyles.subHeading}>No Notificaitons</Text>
+          <Text style={[fontStyles.body, {color:theme.greyText}]}>You didn't get any notifications</Text>
+        </View>
+        :null
+      }
       </ScrollView>
       <StatusBar style="auto" />
     </View>
@@ -120,9 +137,19 @@ export default function Notifications() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  
-    paddingTop: 10,
-    
+    backgroundColor: theme.whiteColor,
+    paddingVertical: 56,
+    paddingHorizontal: 18,
+    gap: 48,
+  },
+  image: {
+    width:100, 
+    height: 100,
+    marginBottom: 12
+  },
+  emptyContainer: {
+    alignItems:'center',
+    justifyContent: 'center',
+    gap: 10,
   },
 });
