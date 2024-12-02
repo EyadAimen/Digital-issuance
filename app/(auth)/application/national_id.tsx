@@ -46,20 +46,24 @@ export default function NationalID() {
         identityNo: identityNumber,
         collectionOffice: collectionOffice,
         progress: 0,
-        messages: [{
-          submissionMessage: [
-          new Date(),
-          "Success",
-          "Apllication submitted successfully"
-          ]
-        }],
         personalPhoto: photoFile
       };
+
+      const initialMessage = {
+        date: new Date(),
+        status: "success",
+        message: "Application submitted successfully"
+      };
+
       const reqRef = collection(db,"requests");
       try {
-        const reqDoc = await addDoc(reqRef, formData)
-        const userRef = doc(db,"users","pxanKx1FkCcIhByoy6XFGxZgm073");
+          const reqDoc = await addDoc(reqRef, formData);
+          const reqDocRef = doc(db, "requests", reqDoc.id);
+          const msgRef = collection(reqDocRef, "messages");
+          const userRef = doc(db,"users",auth.currentUser!.uid);
+
           await setDoc(userRef, {nationalIDApp: reqDoc.id}, {merge : true});
+          await addDoc(msgRef, initialMessage);
           setFullName("")
           setIdentityNumber("")
           setCollectionOffice("")

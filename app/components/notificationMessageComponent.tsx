@@ -8,12 +8,8 @@ type props = {
     message: string,
 }
 
-<<<<<<< HEAD
-export function NotificationMessageComponent({ date, status, title, message }: props) {
+export default function NotificationMessageComponent({ date, status, title, message }: props) {
     
-=======
-export default function NotificationMessageComponent({ date, status, statusMessage, message }: props) {
->>>>>>> cdcf6ff47a5f873b05130afdcbd9e1dc373cce44
     return(
     <View style={styles.card}>
         <Text 

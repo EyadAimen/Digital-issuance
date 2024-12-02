@@ -39,30 +39,32 @@ export default function License() {
     console.log(isValid)
     if (isValid) {
       const formData = {
-        
         userID: auth.currentUser!.uid,
         type: "License",
         fullName: fullName,
         identityNo: identityNumber,
         collectionOffice: collectionOffice,
         progress: 0,
-        messages: [{
-          submissionMessage: [
-          new Date(),
-          "Success",
-          "Apllication submitted successfully"
-          ]
-        }],
         personalPhoto: photoFile
       };
-
+      
+      const initialMessage = {
+        date: new Date(),
+        status: "success",
+        message: "Application submitted successfully"
+      };
+      
 
       const reqRef = collection(db,"requests");
+      
       try {
-        const reqDoc = await addDoc(reqRef, formData);
-        // uer id ---------------------------------------------------------------------------
-          const userRef = doc(db,"users","pxanKx1FkCcIhByoy6XFGxZgm073");
+          const reqDoc = await addDoc(reqRef, formData);
+          const reqDocRef = doc(db, "requests", reqDoc.id);
+          const msgRef = collection(reqDocRef, "messages");
+          const userRef = doc(db,"users",auth.currentUser!.uid);
+          
           await setDoc(userRef, {licenseApp: reqDoc.id}, {merge : true});
+          await addDoc(msgRef, initialMessage);
         
           setFullName("")
           setIdentityNumber("")

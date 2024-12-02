@@ -1,14 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-<<<<<<< HEAD:app/notifications/index.tsx
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { NotificationMessageComponent } from '../components/notificationMessageComponent';
+
+
 import { useEffect, useState } from 'react';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
-=======
-import { StyleSheet, Text, View } from 'react-native';
+
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import NotificationMessageComponent from '../../components/notificationMessageComponent';
->>>>>>> cdcf6ff47a5f873b05130afdcbd9e1dc373cce44:app/(auth)/notifications/index.tsx
 
 export default function Notifications() {
   const auth = FIREBASE_AUTH;
