@@ -1,109 +1,65 @@
-import { Link, router } from 'expo-router';
+import { Link, router, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { theme } from '../theme';
-import { ApplicationStatusCard } from './components/applicationStatusCard';
-import { FormButton } from './components/form/formButton';
-import { useEffect, useState } from 'react';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig';
-import { collection, doc, getDoc } from 'firebase/firestore';
-import { User } from 'firebase/auth';
+import { FIREBASE_AUTH } from '../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
+import { fontStyles } from '../fonts';
+import FormButton from './components/form/formButton';
 
-export default function App() {
-  const [userData, setUserData] = useState<any>(null);
-  const [licenseData, setLicenseData] = useState<any>(null);
-  const [passportData, setPassportData] = useState<any>(null);
-  const [nationalData, setNationalData] = useState<any>(null);
+
+export default function SginIn() {
+  // Handle the input fields
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
 
   const auth = FIREBASE_AUTH;
-  const db = FIREBASE_DB;
- 
- 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userDocRef = doc(db, "users", "pxanKx1FkCcIhByoy6XFGxZgm073");
-        const docSnapshot = await getDoc(userDocRef);
-        
-        if (docSnapshot.exists()) {
-          const user = docSnapshot.data();
-          setUserData(user);
 
-        }
-      } catch (error) {
-        console.error("Error fetching user data: ", error);
-      }
-    };
-
-    fetchUserData();
-  }, []); 
-
-  // fetch the data after the userData is here
-  useEffect(() => {
-    if (userData) {
-      const fetchAdditionalData = async () => {
-        try {
-          if (userData.passportApp) {
-            const passportRef = doc(db, "requests", userData.passportApp);
-            const passportDoc = await getDoc(passportRef);
-            if (passportDoc.exists()) {
-              setPassportData(passportDoc.data());
-            }
-          }
-
-          if (userData.nationalIDApp) {
-            const nationalRef = doc(db, "requests", userData.nationalIDApp);
-            const nationalDoc = await getDoc(nationalRef);
-            if (nationalDoc.exists()) {
-              setNationalData(nationalDoc.data());
-            }
-          }
-
-          if (userData.licenseApp) {
-            const licenseRef = doc(db, "requests", userData.licenseApp);
-            const licenseDoc = await getDoc(licenseRef);
-            if (licenseDoc.exists()) {
-              setLicenseData(licenseDoc.data());
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching additional data: ", error);
-        }
-      };
-
-      fetchAdditionalData();
+  const handleSignIn = async() => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password).then(()=>{alert("signed in");});
+    } catch(e: any) {
+      alert('Sign in failed' + e.message);
     }
-  }, [userData]); 
-
-
+  }
+  
   return (
     <View style={styles.container}>
-      {licenseData ? (
-        <ApplicationStatusCard
-          application={licenseData.type}
-          progress={licenseData.progress}
-          updateMessage={licenseData.messages.slice(-1)[0].submissionMessage[2]}
-        />
-      ) : null}
-
-      {passportData ? (
-        <ApplicationStatusCard
-          application={passportData.type}
-          progress={passportData.progress}
-          updateMessage={passportData.messages.slice(-1)[0].submissionMessage[2]}
-        />
-      ) : null}
-
-      {nationalData ? (
-        <ApplicationStatusCard
-          application={nationalData.type}
-          progress={nationalData.progress}
-          updateMessage={nationalData.messages.slice(-1)[0].submissionMessage[2]}
-        />
-      ) : null}
-
-      <StatusBar style="auto" />
-    </View>
+      <KeyboardAvoidingView behavior='position' >
+            {/* Email */}
+            <View style={styles.inputContianer}>
+              <Text>Email<Text style={{color:theme.failColor}}>*</Text></Text>
+              <TextInput
+                value={email}
+                style={styles.textInput}
+                onChangeText={setEmail}
+                placeholder="E.g muhammad@gmail.com"
+              />
+            </View>
+            
+            {/* Passowrd */}
+            <View style={styles.inputContianer}>
+              <Text>Password<Text style={{color:theme.failColor}}>*</Text></Text>
+              <TextInput
+                value={password}
+                style={styles.textInput}
+                onChangeText={setPassword}
+                placeholder="E.g Password123"
+                secureTextEntry={true}
+              />
+            </View>
+          <FormButton 
+            title='Sign in'
+            handlePress={handleSignIn}
+          />
+          <View style={styles.signUpBox}>
+          <Text>Don't have an account? </Text>
+          <Link href={"/signup"} style={styles.signUpText}>Sign up</Link>
+          </View>
+          </KeyboardAvoidingView>
+          <StatusBar style="auto" />
+        </View>
   );
 }
 
@@ -111,6 +67,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.whiteColor,
-    justifyContent: 'center',
+    paddingVertical: 56,
+    paddingHorizontal: 18,
+    gap: 48,
   },
+  inputsContainer: {
+    marginTop: 32,
+    gap:12,
+  },
+  inputContianer: {
+    display: "flex",
+    gap: 8,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  textInput: {    
+    borderColor: theme.grey2Text,
+    borderWidth: 1,
+    alignSelf: "stretch",
+    padding: 10,
+    fontSize: 16,
+    marginBottom: 12,
+    borderRadius: 6,
+  },
+  buttonStyle: {
+    backgroundColor: theme.primaryBlue,
+    paddingVertical: 16,
+    paddingHorizontal: 10,
+    alignItems: "center",
+    borderRadius: 6,
+    marginTop: 20,
+  },
+
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  signUpBox: {
+    flexDirection: "row",
+    marginTop: 10
+  },
+  signUpText: {
+    color: theme.primaryBlue,
+  }
 });

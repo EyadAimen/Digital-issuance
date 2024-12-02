@@ -1,17 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
-import { fontStyles } from '../../fonts';
-import { theme } from '../../theme';
 import * as DocumentPicker from 'expo-document-picker';
-import { FormInputField } from '../components/form/formInputField';
-import { FormRadioInputField } from '../components/form/formRadioInputField';
-import { FormDropdownField } from '../components/form/formDropdownField';
-import { FormButton } from '../components/form/formButton';
-import { FormPhotoUpload } from '../components/form/formPhotoUpload';
 import { router } from 'expo-router';
-import { FIREBASE_DB, FIREBASE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { fontStyles } from '../../../fonts';
+import { theme } from '../../../theme';
+import FormInputField from '../../components/form/formInputField';
+import FormRadioInputField from '../../components/form/formRadioInputField';
+import FormDropdownField from '../../components/form/formDropdownField';
+import FormPhotoUpload from '../../components/form/formPhotoUpload';
+import FormButton from '../../components/form/formButton';
 
 type errorsType = {
   fullName: string,
@@ -38,8 +38,8 @@ export default function Passport() {
 
     if (isValid) {
       const formData = {
-        userID: "pxanKx1FkCcIhByoy6XFGxZgm073",
-        // userID: auth.currentUser!.uid,
+        
+        userID: auth.currentUser!.uid,
         type: "Passport",
         fullName: fullName,
         identityNo: identityNumber,

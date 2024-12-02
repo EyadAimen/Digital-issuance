@@ -9,7 +9,7 @@ type formInputProps = {
     error?: string
 }
 
-export function FormPhotoUpload({ file, upload, error }: formInputProps) {
+export default function FormPhotoUpload({ file, upload, error }: formInputProps) {
     return (
         <View style={[styles.fileUploadContainer, error ? styles.errorUploadContainer : null]}>
             <FontAwesome name="file-photo-o" size={32} color={theme.lightBlue} />

@@ -9,7 +9,7 @@ type formRadioInputProps = {
     setValue: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export function FormRadioInputField({label, value, setValue}: formRadioInputProps){
+export default function FormRadioInputField({label, value, setValue}: formRadioInputProps){
     return(
         <View style={styles.inputContianer}>
             <Text>{label}<Text style={{color:theme.failColor}}>*</Text></Text>

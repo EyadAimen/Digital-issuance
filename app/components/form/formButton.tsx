@@ -8,7 +8,7 @@ type formButtonTypes = {
     handlePress: () => void
 } 
 
-export function FormButton({title, handlePress}: formButtonTypes){
+export default function FormButton({title, handlePress}: formButtonTypes){
     const [isPressed, setIsPressed] = useState<boolean>(false)
     
     return(
