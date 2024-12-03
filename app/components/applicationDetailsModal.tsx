@@ -12,7 +12,11 @@ type ApplicationDetailsModalProps = {
 
 export default function ApplicationDetailsModal({isModalVisible, application, msg, setIsModalVisible}: ApplicationDetailsModalProps){
     const date =  msg.date.toDate();
-    const textDate = date.toTimeString();
+    const textDate = date.toLocaleDateString('default', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
     const progress = application.progress;
     const status = msg.status;
     const updateMessage =  msg.message;
