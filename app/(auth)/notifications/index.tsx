@@ -138,7 +138,6 @@ export default function Notifications() {
           <Image
             style={styles.image}
             source={require("../../../assets/bell.png")}
-            // placeholder={{ blurhash }}
             contentFit="cover"
             transition={100}
           />
