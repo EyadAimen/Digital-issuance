@@ -46,7 +46,7 @@ export default function NationalID() {
         fullName: fullName,
         identityNo: identityNumber,
         collectionOffice: collectionOffice,
-        progress: 0,
+        progress: 10,
         personalPhoto: photoFile
       };
 
