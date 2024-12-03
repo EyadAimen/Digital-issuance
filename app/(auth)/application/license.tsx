@@ -12,6 +12,7 @@ import FormRadioInputField from '../../components/form/formRadioInputField';
 import FormDropdownField from '../../components/form/formDropdownField';
 import FormPhotoUpload from '../../components/form/formPhotoUpload';
 import FormButton from '../../components/form/formButton';
+import { Image } from 'expo-image';
 
 type errorsType = {
   fullName: string,
@@ -200,6 +201,15 @@ export default function License() {
                 The picture uploaded is recent (picture taken within 1 month).
               </Text>
             </View>
+            <View style={styles.sampleContainer}>
+                <Text style={fontStyles.subHeading}>Sample Picture</Text>
+                <Image
+                  style={styles.image}
+                  source={require("../../../assets/sample_pic.jpg")}
+                  contentFit="cover"
+                  transition={100}
+                />
+              </View>
           </View>
           <FormPhotoUpload
             file={photoFile}
@@ -253,5 +263,15 @@ const styles = StyleSheet.create({
   },
   specifcationItem: {
     flexDirection: 'row'
-  }
+  },
+  sampleContainer: {
+    gap: 16,
+  },
+  image: {
+    width:246.14, 
+    height: 300,
+    marginHorizontal: "auto",
+    marginBottom: 12,
+    padding: 20,
+  },
 });
