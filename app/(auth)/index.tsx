@@ -173,13 +173,6 @@ export default function App() {
           </View>
           :
           <View style={styles.emptyContainer}>
-            {/* <Image
-              style={styles.image}
-              source={require("../../assets/file.png")}
-              // placeholder={{ blurhash }}
-              contentFit="cover"
-              transition={100}
-            /> */}
             <Text style={[fontStyles.subHeading, {color:theme.blackText}, {textAlign:"center"}]}>
               You Don't have any application{'\n'}Let's get started
             </Text>
