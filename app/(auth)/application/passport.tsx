@@ -51,7 +51,7 @@ export default function Passport() {
 
       const initialMessage = {
         date: new Date(),
-        status: "Success",
+        status: "Submitted",
         message: "Application submitted successfully"
       };
 

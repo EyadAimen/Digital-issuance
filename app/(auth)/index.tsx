@@ -142,6 +142,7 @@ export default function App() {
             <ApplicationStatusCard 
             application={passportData.type}
             progress={passportData.progress}
+            status={passportLastMessage.status}
             onPress={() => handleViewDetails(passportData, passportLastMessage)}
             />
           ) : (null)}
@@ -150,6 +151,7 @@ export default function App() {
             <ApplicationStatusCard 
             application={nationalData.type}
             progress={nationalData.progress}
+            status={nationalLastMessage.status}
             onPress={() => handleViewDetails(nationalData, nationalLastMessage)}
             />
           ) : (null)}
@@ -158,6 +160,7 @@ export default function App() {
             <ApplicationStatusCard 
             application={licenseData.type}
             progress={licenseData.progress}
+            status={licenseLastMessage.status}
             onPress={() => handleViewDetails(licenseData, licenseLastMessage)}
             />
           ) : (null)}

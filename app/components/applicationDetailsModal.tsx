@@ -37,10 +37,6 @@ export default function ApplicationDetailsModal({isModalVisible, application, ms
             <View style={styles.infoContainer}>
                 <View style={styles.titleColumn}>
                     <View style={styles.titleItem}>
-                        
-                        <Text style={[fontStyles.body, styles.colon]}>:</Text>
-                    </View>
-                    <View style={styles.titleItem}>
                         <Text style={fontStyles.body}>Update Date </Text>
                         <Text style={[fontStyles.body, styles.colon]}>:</Text>
                     </View>
