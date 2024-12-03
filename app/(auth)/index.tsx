@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, ActivityIndicator, Modal, Pressable } from 'react-native';
+import { theme } from '../../theme';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import { theme } from '../../theme';
+import ApplicationStatusCard from '../components/applicationStatusCard';
 import { fontStyles } from '../../fonts';
 import { router } from 'expo-router';
-import { Image } from 'expo-image';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import ApplicationStatusCard from '../components/applicationStatusCard';
 import ApplicationDetailsModal from '../components/applicationDetailsModal';
 
 export default function App() {
@@ -19,7 +17,7 @@ export default function App() {
   const [passportLastMessage, setPassportLastMessage] = useState<any>(null);
   const [nationalData, setNationalData] = useState<any>(null);
   const [nationalLastMessage, setNationalLastMessage] = useState<any>(null);
-  const [isPressed, setIsPressed] = useState<boolean>(false)
+
 
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -137,63 +135,38 @@ export default function App() {
       <Text style={[fontStyles.sectionHeading, { marginHorizontal: 'auto' }]}>
         Welcome back {userData.userName}!
       </Text>
-        {
-          (passportData || nationalData || licenseData)?
-          <View style={styles.applicationOverviewContainer}>
-            <Text style={fontStyles.subHeading}>Application Overview</Text>
-            <View style={styles.Cardscontainer}>
-              {passportData? (
-                <ApplicationStatusCard 
-                application={passportData.type}
-                progress={passportData.progress}
-                status={passportLastMessage.status}
-                onPress={() => handleViewDetails(passportData, passportLastMessage)}
-                />
-              ) : (null)}
+      <View style={styles.applicationOverviewContainer}>
+        <Text style={fontStyles.subHeading}>Application Overview</Text>
+        <View style={styles.Cardscontainer}>
+          {passportData? (
+            <ApplicationStatusCard 
+            application={passportData.type}
+            progress={passportData.progress}
+            status={passportLastMessage.status}
+            onPress={() => handleViewDetails(passportData, passportLastMessage)}
+            />
+          ) : (null)}
 
-              {nationalData? (
-                <ApplicationStatusCard 
-                application={nationalData.type}
-                progress={nationalData.progress}
-                status={nationalLastMessage.status}
-                onPress={() => handleViewDetails(nationalData, nationalLastMessage)}
-                />
-              ) : (null)}
+          {nationalData? (
+            <ApplicationStatusCard 
+            application={nationalData.type}
+            progress={nationalData.progress}
+            status={nationalLastMessage.status}
+            onPress={() => handleViewDetails(nationalData, nationalLastMessage)}
+            />
+          ) : (null)}
 
-              {licenseData? (
-                <ApplicationStatusCard 
-                application={licenseData.type}
-                progress={licenseData.progress}
-                status={licenseLastMessage.status}
-                onPress={() => handleViewDetails(licenseData, licenseLastMessage)}
-                />
-              ) : (null)}
-              
-            </View>
-          </View>
-          :
-          <View style={styles.emptyContainer}>
-            {/* <Image
-              style={styles.image}
-              source={require("../../assets/file.png")}
-              // placeholder={{ blurhash }}
-              contentFit="cover"
-              transition={100}
-            /> */}
-            <Text style={[fontStyles.subHeading, {color:theme.blackText}, {textAlign:"center"}]}>
-              You Don't have any application{'\n'}Let's get started
-            </Text>
-            <Pressable 
-              style={[styles.ctaButton, isPressed ? styles.clickedButton: null]} 
-              onPress={() => router.navigate("(auth)/application")}
-              onPressIn={() => setIsPressed(true)}
-              onPressOut={() => setIsPressed(false)}
-            >
-              <Ionicons name="document-text-outline" size={32} color={theme.whiteColor} />
-              <Text style={[fontStyles.buttonLabels, { color: theme.whiteColor }]}>New Application</Text>
-            </Pressable>
-          </View>
-        }
+          {licenseData? (
+            <ApplicationStatusCard 
+            application={licenseData.type}
+            progress={licenseData.progress}
+            status={licenseLastMessage.status}
+            onPress={() => handleViewDetails(licenseData, licenseLastMessage)}
+            />
+          ) : (null)}
+          
+        </View>
+      </View>
       {isModalVisible? (
 
         <ApplicationDetailsModal
@@ -229,26 +202,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.whiteColor,
-  },
-  emptyContainer: {
-    paddingVertical: 72,
-    alignItems: 'center',
-    gap: 32
-  },
-  image: {
-    width:100, 
-    height: 100,
-    marginBottom: 12
-  },
-  ctaButton: {
-    backgroundColor: theme.primaryBlue,
-    borderRadius: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 24,
-    gap: 8,
-    alignItems: 'center'
-  },
-  clickedButton: {
-    opacity: .8
-  },
+  }
 });

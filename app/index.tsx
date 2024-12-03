@@ -1,6 +1,6 @@
 import { Link, router, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Alert, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { theme } from '../theme';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -14,11 +14,13 @@ export default function SginIn() {
   // Handle the input fields
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [loading, setLoading] = useState(false);
 
   const auth = FIREBASE_AUTH;
 
   const handleSignIn = async() => {
     try {
+      setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
     } catch(e: any) {
       Alert.alert(
@@ -28,7 +30,15 @@ export default function SginIn() {
           text: "Ok"
         }]
       );
-    }
+    } finally { setLoading(false) }
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={theme.primaryBlue} />
+      </View>
+    );
   }
   
   return (
@@ -108,5 +118,11 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     color: theme.primaryBlue,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.whiteColor,
   }
 });

@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { fontStyles } from '../fonts';
 import { theme } from '../theme';
@@ -23,12 +23,15 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const auth = FIREBASE_AUTH;
   const db = FIREBASE_DB;
   
   const handleSignUp = async() => {
     try {
+      setLoading(true);
+
       await createUserWithEmailAndPassword(auth, email, password).then(async () => {
         try {
           const userData = {
@@ -46,9 +49,18 @@ export default function SignUp() {
       
     } catch(e: any) {
       alert('Sign up failed' + e.message);
-    }
+    } finally { setLoading(false) }
   }
   
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={theme.primaryBlue} />
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={styles.container} >
         <KeyboardAvoidingView behavior='padding' >
@@ -91,4 +103,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     gap: 48,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.whiteColor,
+  }
 });
