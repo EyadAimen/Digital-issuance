@@ -52,7 +52,7 @@ export default function NationalID() {
 
       const initialMessage = {
         date: new Date(),
-        status: "Success",
+        status: "Submitted",
         message: "Application submitted successfully"
       };
 

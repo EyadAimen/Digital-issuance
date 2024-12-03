@@ -6,15 +6,16 @@ import { fontStyles } from "../../fonts";
 type props = {
     application: string
     progress: number
+    status: string
     onPress: (application: any) => void
 }
 
-export default function ApplicationStatusCard({application, progress, onPress}: props) {
+export default function ApplicationStatusCard({application, progress, status, onPress}: props) {
     return (
         <View style={styles.card}>
             <View style={styles.topContainer}>
               <Text style={fontStyles.buttonLabels}>{application}</Text>
-              <Text style={[fontStyles.tabLabels, {color:theme.greyText, marginRight: 6}]}>Status</Text>
+              <Text style={[fontStyles.tabLabels, {color:theme.greyText, marginRight: 6}]}>{status}</Text>
             </View>
             <View style={styles.bottomContainer}>
                 {/* <ProgressBar 
