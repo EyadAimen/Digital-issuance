@@ -5,12 +5,14 @@ import { useEffect, useState } from 'react';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebaseConfig';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import NotificationMessageComponent from '../../components/notificationMessageComponent';
+import { theme } from '../../../theme';
 
 export default function Notifications() {
   const auth = FIREBASE_AUTH;
   const db = FIREBASE_DB;
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
 
   type Message = {
@@ -25,6 +27,7 @@ export default function Notifications() {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      setLoading(true);
       try {
       
         const userDocRef = doc(db, "users", auth.currentUser!.uid);
@@ -96,7 +99,10 @@ export default function Notifications() {
 
           }
           setNotificationList(newNotifications)
+          setLoading(false);
+
         } catch (error) {
+          setLoading(false);
           console.error("Error fetching additional data: ", error);
         }
       };
@@ -105,6 +111,13 @@ export default function Notifications() {
       
     }
   }, [userData]);
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={theme.primaryBlue} />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -130,8 +143,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  
     paddingTop: 10,
-    
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.whiteColor,
+  }
 });

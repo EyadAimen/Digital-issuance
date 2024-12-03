@@ -6,11 +6,10 @@ import { fontStyles } from "../../fonts";
 type props = {
     application: string
     progress: number
-    updateMessage: string
     onPress: (application: any) => void
 }
 
-export default function ApplicationStatusCard({application, progress, updateMessage, onPress}: props) {
+export default function ApplicationStatusCard({application, progress, onPress}: props) {
     return (
         <View style={styles.card}>
             <View style={styles.topContainer}>
@@ -28,7 +27,7 @@ export default function ApplicationStatusCard({application, progress, updateMess
                     <View
                         style={[
                         styles.progressFill,
-                        { width: `${progress * 100}%` },
+                        { width: `${progress}%` },
                         ]}
                     />
                     </View>

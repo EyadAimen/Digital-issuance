@@ -5,11 +5,19 @@ import { theme } from "../../theme";
 type ApplicationDetailsModalProps = {
     isModalVisible: boolean,
     application: any,
+    msg: any,
     setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-export default function ApplicationDetailsModal({isModalVisible, application, setIsModalVisible}: ApplicationDetailsModalProps){
+export default function ApplicationDetailsModal({isModalVisible, application, msg, setIsModalVisible}: ApplicationDetailsModalProps){
+    const date =  msg.date.toDate();
+    const textDate = date.toTimeString();
+    const progress = application.progress;
+    const status = msg.status;
+    const updateMessage =  msg.message;
+  
+  
     return(
         <Modal
         visible={isModalVisible}
@@ -20,16 +28,16 @@ export default function ApplicationDetailsModal({isModalVisible, application, se
         <View style={styles.container}>
         <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-                <Text style={fontStyles.sectionHeading}>{application?.type}</Text>
+                <Text style={fontStyles.sectionHeading}>{application.type}</Text>
             </View>
             <View style={styles.infoContainer}>
                 <View style={styles.titleColumn}>
                     <View style={styles.titleItem}>
-                        <Text style={fontStyles.body}>Application ID </Text>
+                        
                         <Text style={[fontStyles.body, styles.colon]}>:</Text>
                     </View>
                     <View style={styles.titleItem}>
-                        <Text style={fontStyles.body}>Submission Date </Text>
+                        <Text style={fontStyles.body}>Update Date </Text>
                         <Text style={[fontStyles.body, styles.colon]}>:</Text>
                     </View>
                     <View style={styles.titleItem}>
@@ -46,11 +54,11 @@ export default function ApplicationDetailsModal({isModalVisible, application, se
                     </View>
                 </View>
                 <View style={styles.valueColumn}>
-                    <Text style={[fontStyles.body, {color:theme.greyText}]}>PAS12345</Text>
-                    <Text style={[fontStyles.body, {color:theme.greyText}]}>1/12/2024</Text>
-                    <Text style={[fontStyles.body, {color:theme.greyText}]}>60%</Text>
-                    <Text style={[fontStyles.body, {color:theme.greyText}]}>Under Review</Text>
-                    <Text style={[fontStyles.body, {color:theme.greyText}]}>Documents approved, waiting for printing</Text>
+                    
+                    <Text style={[fontStyles.body, {color:theme.greyText}]}>{textDate}</Text>
+                    <Text style={[fontStyles.body, {color:theme.greyText}]}>{progress}%</Text>
+                    <Text style={[fontStyles.body, {color:theme.greyText}]}>{status}</Text>
+                    <Text style={[fontStyles.body, {color:theme.greyText}]}>{updateMessage}</Text>
                 </View>
             </View>
             <Pressable
