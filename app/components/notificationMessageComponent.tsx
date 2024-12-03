@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet } from "react-native"
 import { theme } from "../../theme"
+import { fontStyles } from "../../fonts";
 
 type props = {
     date: Date,
@@ -16,35 +17,35 @@ export default function NotificationMessageComponent({ date, status, title, mess
       });
     return(
     <View style={styles.card}>
-        <Text 
-        style={styles.dateText}>{textDate}</Text>
-        <Text style={[styles.statusText, status === "Fail"? { color:theme.failColor }: status === "Success" ? { color:theme.successColor }: { color:theme.warningColor }]}>{status}</Text>
-        <Text style={styles.statusText}>{title}</Text>
-        <Text style={styles.messageText}>{message}</Text>
+        <View style={styles.cardHeader}>
+            <Text style={[fontStyles.body, {color: theme.whiteColor}]}>{title}</Text>
+            <Text style={[fontStyles.body, {color: theme.whiteColor}]}>{textDate}</Text>
+        </View>
+        <View style={styles.cardContent}>
+            <Text style={[fontStyles.body, {color: theme.greyText}]}>{message}</Text>
+        </View>
     </View>
     );
 }
 
 const styles = StyleSheet.create({
-    dateText: {
-        color: theme.whiteColor,
-        fontSize: 16,
-        backgroundColor: theme.primaryBlue,
-        paddingHorizontal:20,
-        marginBottom: 5,
-        padding: 5
-    },
-    messageText: {
-        color: theme.greyText,
-        fontSize: 14,
-        paddingHorizontal:20
-    },
-    statusText: {
-        color: theme.blackText,
-        fontSize: 16,
-        paddingHorizontal:20,
-    },
     card: {
-        marginBottom: 20
+        marginBottom: 12,
+        borderBottomColor: theme.grey2Text,
+        borderBottomWidth: 1,
+        paddingVertical: 8,
+        marginHorizontal: 12,
+        gap: 10,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        backgroundColor: theme.primaryBlue,
+        borderRadius: 6,
+    },
+    cardContent: {
+        paddingHorizontal: 8,
     }
 })
