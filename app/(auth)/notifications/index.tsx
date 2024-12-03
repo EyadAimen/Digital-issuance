@@ -8,6 +8,8 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import NotificationMessageComponent from '../../components/notificationMessageComponent';
 import { theme } from '../../../theme';
+import { fontStyles } from '../../../fonts';
+import { Image } from 'expo-image';
 
 export default function Notifications() {
   const auth = FIREBASE_AUTH;
@@ -29,14 +31,12 @@ export default function Notifications() {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-      
         const userDocRef = doc(db, "users", auth.currentUser!.uid);
         const docSnapshot = await getDoc(userDocRef);
         
         if (docSnapshot.exists()) {
           const user = docSnapshot.data();
           setUserData(user);
-
         }
       } catch (error) {
         console.error("Error fetching user data: ", error);
@@ -120,8 +120,7 @@ export default function Notifications() {
   }
   return (
     <View style={styles.container}>
-      <ScrollView>
-        
+      <ScrollView style={styles.notificationContainer}>
         {
           notificationsList.map(item => (
             <NotificationMessageComponent 
@@ -134,6 +133,19 @@ export default function Notifications() {
           ))
         }
       </ScrollView>
+      {!notificationsList?
+        <View style={styles.emptyContainer}>
+          <Image
+            style={styles.image}
+            source={require("../../../assets/bell.png")}
+            contentFit="cover"
+            transition={100}
+          />
+          <Text style={fontStyles.subHeading}>No Notificaitons</Text>
+          <Text style={[fontStyles.body, {color:theme.greyText}]}>You didn't get any notifications</Text>
+        </View>
+        :null
+      }
       <StatusBar style="auto" />
     </View>
   );
@@ -142,13 +154,30 @@ export default function Notifications() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 10,
+    backgroundColor: theme.whiteColor,
+    paddingVertical: 32,
+    // gap: 32,
+  },
+  notificationContainer: {
+    gap: 24,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.whiteColor,
-  }
+    paddingVertical: 56,
+    paddingHorizontal: 18,
+    gap: 48,
+  },
+  image: {
+    width:100, 
+    height: 100,
+    marginBottom: 12
+  },
+  emptyContainer: {
+    alignItems:'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
 });
